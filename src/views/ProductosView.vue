@@ -60,10 +60,6 @@ function formatPrice(price) {
 
     <div v-if="productsStore.loading" class="loading">Cargando productos...</div>
 
-    <div v-else-if="productsStore.error" class="error">
-      Error al cargar productos: {{ productsStore.error }}
-    </div>
-
     <div v-else class="products-grid">
       <div
         v-for="product in productsStore.filteredProducts"
