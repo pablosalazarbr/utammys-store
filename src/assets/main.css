@@ -1,35 +1,43 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
 @import './base.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+/* Tailwind CSS Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global Styles */
+:root {
+  --primary: #000000;
+  --accent-grey: #F5F5F5;
+  --border-soft: #E5E5E5;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+html {
+  scroll-behavior: smooth;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+body {
+  @apply bg-white text-black font-sans antialiased tracking-tight;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+h1, h2, h3, h4, h5, h6 {
+  @apply font-serif;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+/* Editorial Text Spacing */
+.editorial-spacing {
+  letter-spacing: 0.05em;
+}
+
+/* Smooth transitions */
+a {
+  @apply transition-colors duration-300;
+}
+
+/* Selection styling */
+::selection {
+  @apply bg-black text-white;
 }

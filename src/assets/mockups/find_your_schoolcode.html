@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>School Directory Selection</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#16599c",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111921",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"],
+                        "serif": ["Georgia", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .monochrome-img {
+            filter: grayscale(100%) contrast(1.1);
+            transition: filter 0.3s ease;
+        }
+        .monochrome-img:hover {
+            filter: grayscale(0%) contrast(1);
+        }
+        .letter-spacing-wide {
+            letter-spacing: 0.15em;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 transition-colors duration-200">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-8 py-6 lg:px-20 bg-background-light dark:bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-4">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold tracking-tight uppercase letter-spacing-wide">Uniform Store</h2>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest" href="#">Shop</a>
+<a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest" href="#">Collections</a>
+<a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest" href="#">Heritage</a>
+<a class="text-sm font-medium hover:text-primary transition-colors uppercase tracking-widest" href="#">Contact</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-700 dark:text-slate-300 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full px-6 lg:px-20 py-16">
+<!-- Headline Section -->
+<div class="text-center mb-16">
+<h1 class="font-serif text-5xl md:text-6xl text-slate-900 dark:text-white mb-8 italic">Find Your School</h1>
+<!-- Minimalist Search Bar -->
+<div class="max-w-2xl mx-auto mt-12 relative group">
+<div class="flex items-center border-b-2 border-slate-200 dark:border-slate-800 focus-within:border-primary transition-colors py-2">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 mr-3">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-xl font-light placeholder:text-slate-400 text-slate-900 dark:text-white pb-2" placeholder="Start typing your school name..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Alphabet Filter -->
+<div class="flex flex-wrap justify-center gap-x-6 gap-y-4 mb-20 border-y border-slate-100 dark:border-slate-800 py-6">
+<a class="text-xs font-bold text-primary tracking-widest uppercase underline decoration-2 underline-offset-4" href="#">A</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">B</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">C</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">D</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">E</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">F</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">G</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">H</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">I</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">J</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">K</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">L</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">M</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">N</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">O</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">P</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">Q</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">R</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">S</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">T</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">U</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">V</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">W</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">X</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">Y</a>
+<a class="text-xs font-medium text-slate-400 hover:text-slate-900 dark:hover:text-white tracking-widest uppercase transition-colors" href="#">Z</a>
+</div>
+<!-- Featured Schools Grid -->
+<section>
+<div class="flex items-center justify-between mb-10">
+<h2 class="text-sm font-bold tracking-widest uppercase text-slate-400">Featured Establishments</h2>
+<span class="h-[1px] flex-1 bg-slate-100 dark:bg-slate-800 ml-6"></span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+<!-- School Card 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden bg-slate-100 dark:bg-slate-900 mb-6 rounded-sm">
+<img alt="Modern brick school building facade" class="w-full h-full object-cover monochrome-img group-hover:scale-105 transition-transform duration-500" data-alt="Monochromatic architectural photography of a historic university campus building" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7ZUr22ClSGehhlWslvBLlMkAwxT79RVaviEHUe_qf0HoBTxUJtB30z4MVbZgCzJfT5sR_NCizw61l0C0Jhr0I5gSERGkhbHNy3hBSXPywM4lKjfcDuBSdh61piL9j8GE84RvGpsmGPxDyaLtXIJjX2AeEG0-O_wRIslib5t9yebnlDZBDGTKBr54vvtrBaipRF2r6iIF6G9r1WwoZbrXri0wMaPS7xbq1NGl3goG1MrNGIbSl4Q5TQAp8EOc6d2pwCrTVSh8sqVu_"/>
+</div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white group-hover:text-primary transition-colors">Abbey College Manchester</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-tighter">Established 1990</p>
+</div>
+<!-- School Card 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden bg-slate-100 dark:bg-slate-900 mb-6 rounded-sm">
+<img alt="College crest on stone wall" class="w-full h-full object-cover monochrome-img group-hover:scale-105 transition-transform duration-500" data-alt="Close up of a traditional school stone crest on a wall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHhBYs66Kmwqvmatlr29bl4c_HgWdbgop0PoalDiI_N4cnnIivPXktR573UIjdjmaOAEnEQw9Cb-o_26h2HGNyaYvfLDM51xn7_JBqNZT4ZZZ79z6d6UxB_K0PbjX2v4ySkMCxTh9QXOsb-MjwRlc6xI9DugwMIjlN2d59AdkkbRY10g0T0eFLPIRhPe3AfQEYobsui6dUCS-0-k8Mx7gmqlXtPSpL1cos1Rd0vDQDhpiZG49508KJeHwEKeaaI6VOlEVt1ESEXkbs"/>
+</div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white group-hover:text-primary transition-colors">Ardingly College</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-tighter">West Sussex, UK</p>
+</div>
+<!-- School Card 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden bg-slate-100 dark:bg-slate-900 mb-6 rounded-sm">
+<img alt="Grand library interior" class="w-full h-full object-cover monochrome-img group-hover:scale-105 transition-transform duration-500" data-alt="Minimalist interior architecture of a high-end school library" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1-jyQDx-dtyvdjgsXAYYDmEltypyrgiRAASoKBKkX9YH0rBS5nNDqY7DS_WvcsUIAglM8hKwk2bweS6VYy9NESIAEFZJ2c9yC8gOzkMY2V5AmTF6mdlg1Ehy51XfHwPhLriIbgJ_qTE30y72A3kiwmjQV-PclHPjA95s5q-zC6nExWLCn9a95ApKQWHEDgJx7eA8cRIZ1hl0bufYsJVEZR3GOuQwT_ZxgOOjsSwPqo-K0l8Z6zJZ3U8bA5yaXAYhSV5QOb_vuFj-3"/>
+</div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white group-hover:text-primary transition-colors">Ashbourne Sixth Form College</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-tighter">Kensington, London</p>
+</div>
+<!-- School Card 4 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden bg-slate-100 dark:bg-slate-900 mb-6 rounded-sm">
+<img alt="Wrought iron school gates" class="w-full h-full object-cover monochrome-img group-hover:scale-105 transition-transform duration-500" data-alt="Classic wrought iron gates of a prestigious educational institution" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlNsBbexTC0BocfJKSvw8maHlmyj2hmim-vpAbIoGuV7croKqjKLsvqHtGQ6PVk0MqxiyYN1js9Uv5gODm3VSIph2rcjWMG_RkVBHei4ZDlg8dvJMExQ1ruCHn1ggqsvQaiM6hapHblTfKtZEXX5vlaVPZq6q6JxlfRNUVauzxdnlGo9REFiBdeEueOqmSaj8sAyuj-v55rshw5ZzBdRxvEx9am3Nj2e6vs5FdoezcpCN4eE_9K_74nfo150sbl2353mcTb7ipsByM"/>
+</div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white group-hover:text-primary transition-colors">ACS International School</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-tighter">Cobham Campus</p>
+</div>
+<!-- School Card 5 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden bg-slate-100 dark:bg-slate-900 mb-6 rounded-sm">
+<img alt="Ancient clock tower" class="w-full h-full object-cover monochrome-img group-hover:scale-105 transition-transform duration-500" data-alt="Architectural detail of an old school clock tower" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1LyeSQqQF8_Rnef2Xa4cB-yLusC4-vz2wOrxvUeOPVNA-P0NmBjGNp1YydrxoZ9EVg4t0ptAjE6L5v1be8DOErQ4dr0qdjlLRrEL1FSV2SiUJRwTE3X-08BWgqNj4sLf-XkA6qq51Yc_dXMFUMwvVnHMw7C-F9cjeIH0vZ1Vt8ssI9idGuDe8bQeHcE14J8pDM_eKv-xcQFwjeazAhgeVN79BkjbiabZV3swrl6cVYX38m3TvjdsRMka1IlT0zailWVoDOuzqhD4J"/>
+</div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white group-hover:text-primary transition-colors">Ackworth School</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-tighter">Pontefract, Yorkshire</p>
+</div>
+<!-- School Card 6 -->
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] overflow-hidden bg-slate-100 dark:bg-slate-900 mb-6 rounded-sm">
+<img alt="Minimalist hallway" class="w-full h-full object-cover monochrome-img group-hover:scale-105 transition-transform duration-500" data-alt="Modern minimalist architecture of a secondary school hallway" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnnGLVGQba3QdVI09WIyhyU5CXyDuTV8c6aOJNZTvSX4rjBva66zhwTFgflJwJ9ijtI03TWylQOQMDU5gsVleQHlOb5JxLRP7W_5oT1ffb7_TtgpuLL2D6VGX-8r5160EaaoyZ9jKremHFfotZNB4qzQeCUvhZPLTcoZQdOwubZodswfh4gRTehIpN0VG68vg4tQvpcQiBGNTtzNvqS7ZJhK0v69DMBtrX6Q0kn0b5rJorw8skPejlJMj2B1H4L8oLnnFHxjW94tBi"/>
+</div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-slate-900 dark:text-white group-hover:text-primary transition-colors">Albemarle College</h3>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-2 uppercase tracking-tighter">Mayfair, London</p>
+</div>
+</div>
+</section>
+<!-- Footer Help Section -->
+<div class="mt-32 text-center border-t border-slate-200 dark:border-slate-800 pt-16">
+<p class="text-slate-400 text-sm font-medium uppercase tracking-widest mb-4">Cannot find your institution?</p>
+<a class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-bold text-sm tracking-widest uppercase transition-all group" href="#">
+                    Contact Enrollment Support
+                    <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</main>
+<!-- Minimal Footer -->
+<footer class="bg-white dark:bg-slate-950 py-10 px-6 lg:px-20 text-center">
+<p class="text-[10px] text-slate-400 uppercase tracking-[0.3em]">© 2024 Uniform Store — Dedicated to Academic Excellence</p>
+</footer>
+</div>
+</body></html>

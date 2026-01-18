@@ -9,6 +9,7 @@ export const useCartStore = defineStore('cart', () => {
 
   // Mock API URL
   const API_URL = import.meta.env.VITE_API_URL || 'https://api.example.com'
+  const API_BASE_URL = API_URL.replace('/api', '')
 
   // Computed
   const itemCount = computed(() => {
@@ -20,6 +21,13 @@ export const useCartStore = defineStore('cart', () => {
   })
 
   // Actions
+  function getImageUrl(mediaPath) {
+    if (!mediaPath) {
+      return 'https://images.unsplash.com/photo-1488161994519-c21cc028cb0d?w=500&h=600&fit=crop'
+    }
+    return `${API_BASE_URL}${mediaPath}`
+  }
+
   function addItem(product, size, quantity = 1) {
     const existingItem = items.value.find((item) => item.id === product.id && item.size === size)
 
@@ -30,7 +38,7 @@ export const useCartStore = defineStore('cart', () => {
         id: product.id,
         name: product.name,
         price: product.price,
-        image: product.image,
+        image: getImageUrl(product.media?.main),
         size,
         quantity,
         category: product.category,

@@ -1,5 +1,6 @@
 <script setup>
 import { useCartStore } from '@/stores/cart'
+import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 
 const cartStore = useCartStore()
@@ -35,398 +36,178 @@ async function handleCheckout() {
 </script>
 
 <template>
-  <div class="carrito">
-    <h1>Mi Carrito de Compras</h1>
-
-    <div v-if="checkoutSuccess" class="success-message">
-      ¡Pedido realizado con éxito! Gracias por tu compra.
-    </div>
-
-    <div v-if="cartStore.items.length === 0" class="empty-cart">
-      <p class="empty-icon">🛒</p>
-      <h2>Tu carrito está vacío</h2>
-      <p>Agrega productos desde nuestro catálogo para comenzar tu compra</p>
-      <RouterLink to="/productos" class="btn-primary">Ver Productos</RouterLink>
-    </div>
-
-    <div v-else class="cart-content">
-      <div class="cart-items">
-        <div v-for="item in cartStore.items" :key="`${item.id}-${item.size}`" class="cart-item">
-          <div class="item-image">
-            <img :src="item.image" :alt="item.name" />
-          </div>
-
-          <div class="item-details">
-            <h3>{{ item.name }}</h3>
-            <p class="item-category">{{ item.category }}</p>
-            <p class="item-size">Talla: {{ item.size }}</p>
-            <p class="item-price">{{ formatPrice(item.price) }}</p>
-          </div>
-
-          <div class="item-quantity">
-            <button
-              @click="cartStore.updateQuantity(item.id, item.size, item.quantity - 1)"
-              class="quantity-btn"
-            >
-              -
-            </button>
-            <span class="quantity">{{ item.quantity }}</span>
-            <button
-              @click="cartStore.updateQuantity(item.id, item.size, item.quantity + 1)"
-              class="quantity-btn"
-            >
-              +
-            </button>
-          </div>
-
-          <div class="item-subtotal">
-            <p class="subtotal-label">Subtotal:</p>
-            <p class="subtotal-price">{{ formatPrice(item.price * item.quantity) }}</p>
-          </div>
-
-          <button
-            @click="cartStore.removeItem(item.id, item.size)"
-            class="remove-btn"
-            title="Eliminar"
-          >
-            🗑️
-          </button>
-        </div>
-      </div>
-
-      <div class="cart-summary">
-        <h2>Resumen del Pedido</h2>
-
-        <div class="summary-line">
-          <span>Productos:</span>
-          <span>{{ cartStore.itemCount }}</span>
-        </div>
-
-        <div class="summary-line total">
-          <span>Total:</span>
-          <span>{{ formatPrice(cartStore.total) }}</span>
-        </div>
-
-        <button @click="handleCheckout" class="btn-checkout" :disabled="cartStore.loading">
-          {{ cartStore.loading ? 'Procesando...' : 'Proceder al Pago' }}
-        </button>
-
-        <button @click="cartStore.clearCart" class="btn-clear">Vaciar Carrito</button>
-
-        <RouterLink to="/productos" class="continue-shopping"> ← Continuar Comprando </RouterLink>
+  <main class="flex-1">
+    <!-- Page Header -->
+    <div class="border-b border-border-soft py-12 px-6 md:px-12">
+      <div class="max-w-[1600px] mx-auto">
+        <h1 class="text-5xl md:text-6xl font-serif mb-2">Carrito de Compras</h1>
+        <p class="text-neutral-500 text-sm font-light uppercase tracking-widest">Artículos seleccionados para tu compra</p>
       </div>
     </div>
-  </div>
+
+    <!-- Success Message -->
+    <transition name="fade">
+      <div v-if="checkoutSuccess" class="bg-green-50 border border-green-200 py-4 px-6 md:px-12">
+        <div class="max-w-[1600px] mx-auto text-green-700 font-semibold">
+          ✓ ¡Pedido realizado con éxito! Gracias por tu compra.
+        </div>
+      </div>
+    </transition>
+
+    <!-- Empty Cart -->
+    <div v-if="cartStore.items.length === 0" class="py-32 px-6 md:px-12">
+      <div class="max-w-[600px] mx-auto text-center space-y-6">
+        <div class="text-6xl mb-4">🛒</div>
+        <h2 class="text-3xl font-serif">Tu carrito está vacío</h2>
+        <p class="text-neutral-500 text-lg">Agrega productos desde nuestro catálogo para comenzar tu compra</p>
+        <RouterLink to="/tienda" class="inline-block px-10 py-4 bg-primary text-white text-[11px] uppercase tracking-widest font-semibold hover:bg-black/90 transition-colors">
+          Ver Catálogo
+        </RouterLink>
+      </div>
+    </div>
+
+    <!-- Cart Content -->
+    <div v-else class="px-6 md:px-12 py-12">
+      <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Cart Table -->
+        <div class="lg:col-span-2">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-border-soft">
+                  <th class="py-6 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 w-24">Producto</th>
+                  <th class="py-6 px-6 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400">Descripción</th>
+                  <th class="py-6 px-4 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 text-center w-32">Cantidad</th>
+                  <th class="py-6 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 text-right w-32">Total</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-neutral-100">
+                <tr v-for="item in cartStore.items" :key="`${item.id}-${item.size}`" class="hover:bg-accent-grey/50 transition-colors">
+                  <!-- Product Image -->
+                  <td class="py-8">
+                    <div class="bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-sm w-20 border border-border-soft" 
+                         :style="`background-image: url('${item.image || 'https://images.unsplash.com/photo-1488161994519-c21cc028cb0d?w=200&h=300&fit=crop'}')`">
+                    </div>
+                  </td>
+
+                  <!-- Product Details -->
+                  <td class="py-8 px-6">
+                    <h3 class="text-primary font-semibold">{{ item.name }}</h3>
+                    <p class="text-neutral-500 text-sm mt-1">Talla: {{ item.size }} | Categoría: {{ item.category }}</p>
+                    <p class="text-neutral-400 text-xs mt-4 font-light">{{ item.price }}</p>
+                  </td>
+
+                  <!-- Quantity -->
+                  <td class="py-8 px-4 text-center">
+                    <div class="inline-flex items-center border border-border-soft rounded-sm">
+                      <button 
+                        @click="cartStore.updateQuantity(item.id, item.size, item.quantity - 1)"
+                        class="px-3 py-1 text-neutral-400 hover:text-primary transition-colors font-semibold"
+                      >
+                        −
+                      </button>
+                      <span class="px-3 py-1 text-sm font-semibold w-8 text-center">{{ item.quantity }}</span>
+                      <button 
+                        @click="cartStore.updateQuantity(item.id, item.size, item.quantity + 1)"
+                        class="px-3 py-1 text-neutral-400 hover:text-primary transition-colors font-semibold"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </td>
+
+                  <!-- Total & Remove -->
+                  <td class="py-8 text-right pr-6">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-primary">{{ formatPrice(item.price * item.quantity) }}</span>
+                      <button 
+                        @click="cartStore.removeItem(item.id, item.size)"
+                        class="text-neutral-400 hover:text-red-500 transition-colors ml-4"
+                      >
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Continue Shopping -->
+          <div class="mt-12 pt-8 border-t border-border-soft">
+            <RouterLink to="/tienda" class="text-[11px] uppercase tracking-[0.2em] border-b border-primary pb-1 hover:opacity-70 transition-opacity inline-flex items-center gap-2">
+              <svg class="w-4 h-4 rotate-180" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+              Continuar Comprando
+            </RouterLink>
+          </div>
+        </div>
+
+        <!-- Order Summary Sidebar -->
+        <aside class="lg:col-span-1">
+          <div class="bg-accent-grey border border-border-soft p-8 sticky top-32">
+            <h2 class="text-primary text-xl font-bold uppercase tracking-tight mb-8">Resumen de Orden</h2>
+
+            <!-- Items -->
+            <div class="space-y-4 mb-8">
+              <div class="flex justify-between text-sm">
+                <span class="text-neutral-500 uppercase tracking-widest text-[11px] font-bold">Subtotal</span>
+                <span class="text-primary font-semibold">{{ formatPrice(cartStore.total) }}</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-neutral-500 uppercase tracking-widest text-[11px] font-bold">Envío</span>
+                <span class="text-primary font-semibold">A calcular</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-neutral-500 uppercase tracking-widest text-[11px] font-bold">Impuesto</span>
+                <span class="text-primary font-semibold">{{ formatPrice(0) }}</span>
+              </div>
+            </div>
+
+            <!-- Total -->
+            <div class="border-t border-border-soft pt-6 mb-8">
+              <div class="flex justify-between items-center">
+                <span class="text-primary uppercase tracking-widest text-[11px] font-bold">TOTAL</span>
+                <span class="text-2xl font-bold text-primary">{{ formatPrice(cartStore.total) }}</span>
+              </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="space-y-4">
+              <button 
+                @click="handleCheckout"
+                :disabled="cartStore.loading"
+                class="w-full bg-primary text-white py-4 text-xs font-bold uppercase tracking-[0.3em] hover:bg-black/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              >
+                {{ cartStore.loading ? 'Procesando...' : 'Proceder al Pago' }}
+              </button>
+              <button 
+                @click="cartStore.clearCart"
+                class="w-full border border-primary text-primary py-4 text-xs font-bold uppercase tracking-[0.3em] hover:bg-primary hover:text-white transition-all"
+              >
+                Vaciar Carrito
+              </button>
+            </div>
+
+            <!-- Items Count -->
+            <div class="mt-8 pt-8 border-t border-border-soft text-center">
+              <p class="text-[10px] uppercase tracking-widest text-neutral-400 mb-2">Items en carrito</p>
+              <p class="text-2xl font-bold text-primary">{{ cartStore.itemCount }}</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
 </template>
 
 <style scoped>
-.carrito h1 {
-  font-size: 2.5rem;
-  color: #2c3e50;
-  margin-bottom: 2rem;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
 }
 
-.success-message {
-  background: #10b981;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  text-align: center;
-  margin-bottom: 2rem;
-  font-weight: 600;
-}
-
-.empty-cart {
-  text-align: center;
-  padding: 4rem 2rem;
-}
-
-.empty-icon {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-}
-
-.empty-cart h2 {
-  color: #2c3e50;
-  margin-bottom: 1rem;
-}
-
-.empty-cart p {
-  color: #666;
-  margin-bottom: 2rem;
-  font-size: 1.1rem;
-}
-
-.btn-primary {
-  display: inline-block;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: transform 0.2s;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-}
-
-.cart-content {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 2rem;
-}
-
-.cart-items {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.cart-item {
-  display: grid;
-  grid-template-columns: 120px 1fr auto auto auto;
-  gap: 1.5rem;
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  align-items: center;
-}
-
-.item-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #f8f9fa;
-}
-
-.item-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.item-details h3 {
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
-
-.item-category {
-  color: #667eea;
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
-}
-
-.item-size {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.item-price {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 1.1rem;
-}
-
-.item-quantity {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: #f8f9fa;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-}
-
-.quantity-btn {
-  width: 30px;
-  height: 30px;
-  border: none;
-  background: #667eea;
-  color: white;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s;
-}
-
-.quantity-btn:hover {
-  background: #764ba2;
-}
-
-.quantity {
-  font-weight: 600;
-  font-size: 1.1rem;
-  min-width: 30px;
-  text-align: center;
-}
-
-.item-subtotal {
-  text-align: right;
-}
-
-.subtotal-label {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
-}
-
-.subtotal-price {
-  font-weight: 700;
-  color: #667eea;
-  font-size: 1.3rem;
-}
-
-.remove-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
-  padding: 0.5rem;
-  transition: transform 0.2s;
-}
-
-.remove-btn:hover {
-  transform: scale(1.2);
-}
-
-.cart-summary {
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  height: fit-content;
-  position: sticky;
-  top: 2rem;
-}
-
-.cart-summary h2 {
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-}
-
-.summary-line {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 0;
-  border-bottom: 1px solid #e0e0e0;
-  color: #666;
-}
-
-.summary-line.total {
-  border-bottom: none;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-top: 1rem;
-}
-
-.btn-checkout {
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 1.5rem;
-  transition: transform 0.2s;
-}
-
-.btn-checkout:hover:not(:disabled) {
-  transform: translateY(-2px);
-}
-
-.btn-checkout:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-clear {
-  width: 100%;
-  padding: 0.75rem;
-  background: white;
-  color: #ff4757;
-  border: 2px solid #ff4757;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 1rem;
-  transition: all 0.3s;
-}
-
-.btn-clear:hover {
-  background: #ff4757;
-  color: white;
-}
-
-.continue-shopping {
-  display: block;
-  text-align: center;
-  margin-top: 1.5rem;
-  color: #667eea;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.continue-shopping:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 1024px) {
-  .cart-content {
-    grid-template-columns: 1fr;
-  }
-
-  .cart-summary {
-    position: static;
-  }
-
-  .cart-item {
-    grid-template-columns: 100px 1fr;
-    grid-template-areas:
-      'image details'
-      'image quantity'
-      'subtotal subtotal'
-      'remove remove';
-    gap: 1rem;
-  }
-
-  .item-image {
-    grid-area: image;
-    width: 100px;
-    height: 100px;
-  }
-
-  .item-details {
-    grid-area: details;
-  }
-
-  .item-quantity {
-    grid-area: quantity;
-  }
-
-  .item-subtotal {
-    grid-area: subtotal;
-    text-align: left;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .remove-btn {
-    grid-area: remove;
-    justify-self: center;
-  }
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

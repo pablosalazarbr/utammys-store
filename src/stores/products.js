@@ -8,9 +8,9 @@ export const useProductsStore = defineStore('products', () => {
   const error = ref(null)
   const categories = ref(['Todos', 'Escolares', 'Empresariales'])
   const selectedCategory = ref('Todos')
+  const selectedClient = ref(null)
 
-  // Mock API URL - replace with your actual API endpoint
-  const API_URL = import.meta.env.VITE_API_URL || 'https://api.example.com'
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 
   // Computed
   const filteredProducts = computed(() => {
@@ -22,15 +22,29 @@ export const useProductsStore = defineStore('products', () => {
 
   // Actions
   async function fetchProducts() {
+    if (!selectedClient.value) {
+      console.warn('No client selected')
+      return
+    }
+
     loading.value = true
     error.value = null
     try {
-      // Replace with actual API call
-      const response = await axios.get(`${API_URL}/products`)
-      products.value = response.data
+      const response = await axios.get(`${API_URL}/shop/products`, {
+        params: {
+          client_id: selectedClient.value
+        }
+      })
+      
+      if (response.data.success) {
+        products.value = response.data.data
+      } else {
+        error.value = response.data.message || 'Error al obtener productos'
+      }
     } catch (err) {
       error.value = err.message
-      // Mock data for development
+      console.error('Error fetching products:', err)
+      // Mock data for development fallback
       products.value = [
         {
           id: 1,
@@ -96,14 +110,22 @@ export const useProductsStore = defineStore('products', () => {
     selectedCategory.value = category
   }
 
+  function setSelectedClient(clientId) {
+    selectedClient.value = clientId
+    // Automáticamente cargar productos del cliente
+    fetchProducts()
+  }
+
   return {
     products,
     loading,
     error,
     categories,
     selectedCategory,
+    selectedClient,
     filteredProducts,
     fetchProducts,
     setCategory,
+    setSelectedClient,
   }
 })

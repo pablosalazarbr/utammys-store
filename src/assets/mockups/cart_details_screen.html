@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Full Editorial Shopping Cart</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1a1a1a",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#191919",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-primary dark:text-neutral-200 transition-colors duration-200">
+<div class="layout-container flex h-full grow flex-col min-h-screen">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-neutral-200 dark:border-neutral-800 px-10 py-5 bg-white dark:bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-12">
+<div class="flex items-center gap-3 text-primary dark:text-white">
+<div class="size-6">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-primary dark:text-white text-xl font-black leading-tight tracking-tighter">UNIFORM EDITORIAL</h2>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-primary dark:text-neutral-400 text-xs font-bold tracking-widest uppercase hover:text-neutral-500 transition-colors" href="#">Collections</a>
+<a class="text-primary dark:text-neutral-400 text-xs font-bold tracking-widest uppercase hover:text-neutral-500 transition-colors" href="#">About</a>
+<a class="text-primary dark:text-neutral-400 text-xs font-bold tracking-widest uppercase hover:text-neutral-500 transition-colors" href="#">Journal</a>
+<a class="text-primary dark:text-neutral-400 text-xs font-bold tracking-widest uppercase hover:text-neutral-500 transition-colors" href="#">Stores</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-primary dark:text-white">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="text-primary dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-xs font-bold">(2)</span>
+</button>
+</div>
+</header>
+<main class="max-w-[1400px] mx-auto w-full px-6 py-12 md:px-10">
+<!-- Page Heading -->
+<div class="flex flex-col gap-2 mb-12">
+<h1 class="text-primary dark:text-white text-5xl font-black tracking-tightest">Shopping Cart</h1>
+<p class="text-neutral-500 text-sm font-normal uppercase tracking-widest">Selected items for your editorial uniform</p>
+</div>
+<div class="flex flex-col lg:flex-row gap-16">
+<!-- Cart Table Area -->
+<div class="flex-1 overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-neutral-200 dark:border-neutral-800">
+<th class="py-6 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 w-24">Product</th>
+<th class="py-6 px-6 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400">Description</th>
+<th class="py-6 px-4 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 text-center w-32">Quantity</th>
+<th class="py-6 text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 text-right w-32">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-100 dark:divide-neutral-900">
+<!-- Item 1 -->
+<tr>
+<td class="py-8">
+<div class="bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-sm w-20 border border-neutral-100 dark:border-neutral-800" data-alt="Minimalist navy wool blazer on mannequin" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAJIaEC9fzy2WnjAnDnUvHpc0HCIYyyq0p2J3btBcX5TF8LHotBmEkWELVdQ428e4J2g1JHCWRcr5zY8BTp4eWmJLHYe6qUuYPLRVwUJLoLS3eNU9daWwI7WwKkp3FODyifHq7LJZyY7uHabU7FF4zQgkxoko-ldyS8U87tDglZLGswu3tjM7X8ZYh-ptzTm6SUquilaJ6tEJwbvo3C9pjakce6Db5hgydpHklBQ4fCQuStkibSjlqVoIRUCysDGfLEVvk7wriHIax7");'></div>
+</td>
+<td class="py-8 px-6">
+<h3 class="text-primary dark:text-white text-lg font-bold">Classic School Blazer</h3>
+<p class="text-neutral-500 text-sm mt-1">Size: M | Color: Midnight Navy</p>
+<p class="text-neutral-400 text-xs mt-4">Ref: 4829-01</p>
+</td>
+<td class="py-8 px-4 text-center">
+<div class="inline-flex items-center border border-neutral-200 dark:border-neutral-800 rounded-sm">
+<button class="px-3 py-1 text-neutral-400 hover:text-primary">-</button>
+<span class="px-3 py-1 text-sm font-medium">1</span>
+<button class="px-3 py-1 text-neutral-400 hover:text-primary">+</button>
+</div>
+</td>
+<td class="py-8 text-right font-medium text-primary dark:text-white">$185.00</td>
+</tr>
+<!-- Item 2 -->
+<tr>
+<td class="py-8">
+<div class="bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-sm w-20 border border-neutral-100 dark:border-neutral-800" data-alt="Pleated charcoal grey skirt detail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_UwD9FNlDijgHkGI1cCzs-P61sKLAx_tvVBpr8-n99aAxwrNou3KDdNM3isk_XBos-SelyQVOhQW0G1_ZbP-PoiIVwVDz42e1_AudG7C4ZNHa7YvcUq8coMO85wm4wAiPIlF69N7yGTvlGgmFLldKepbebGyg7FPaKsUYwVzVJ6teB9cYJFIwj9bbd9j3IkXCc1-sTJPMxjwnKgutZdDcZR1OLhBC23NsWQBXu1uFR5R6PLiJqAKV4PLpo7wYSiFxHewzEmfizVYI");'></div>
+</td>
+<td class="py-8 px-6">
+<h3 class="text-primary dark:text-white text-lg font-bold">Pleated Wool Skirt</h3>
+<p class="text-neutral-500 text-sm mt-1">Size: S | Color: Charcoal Grey</p>
+<p class="text-neutral-400 text-xs mt-4">Ref: 5910-44</p>
+</td>
+<td class="py-8 px-4 text-center">
+<div class="inline-flex items-center border border-neutral-200 dark:border-neutral-800 rounded-sm">
+<button class="px-3 py-1 text-neutral-400 hover:text-primary">-</button>
+<span class="px-3 py-1 text-sm font-medium">1</span>
+<button class="px-3 py-1 text-neutral-400 hover:text-primary">+</button>
+</div>
+</td>
+<td class="py-8 text-right font-medium text-primary dark:text-white">$65.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Order Summary Sidebar -->
+<aside class="w-full lg:w-[400px]">
+<div class="bg-white dark:bg-background-dark border border-neutral-200 dark:border-neutral-800 p-8 sticky top-32">
+<h2 class="text-primary dark:text-white text-xl font-black uppercase tracking-tight mb-8">Order Summary</h2>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between text-sm">
+<span class="text-neutral-500 uppercase tracking-widest text-[11px] font-bold">Subtotal</span>
+<span class="text-primary dark:text-white font-medium">$250.00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-neutral-500 uppercase tracking-widest text-[11px] font-bold">Shipping</span>
+<span class="text-primary dark:text-white font-medium">$15.00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-neutral-500 uppercase tracking-widest text-[11px] font-bold">Tax</span>
+<span class="text-primary dark:text-white font-medium">$0.00</span>
+</div>
+<div class="border-t border-neutral-100 dark:border-neutral-900 pt-4 flex justify-between">
+<span class="text-primary dark:text-white text-lg font-black uppercase tracking-tight">Total</span>
+<span class="text-primary dark:text-white text-2xl font-black">$265.00</span>
+</div>
+</div>
+<!-- Promo Code -->
+<div class="mb-10">
+<label class="block text-[11px] font-bold uppercase tracking-widest text-neutral-400 mb-2">Promo Code</label>
+<div class="relative">
+<input class="w-full bg-transparent border-0 border-b border-neutral-200 dark:border-neutral-800 focus:ring-0 focus:border-primary px-0 py-2 text-sm placeholder:text-neutral-300" placeholder="ENTER CODE" type="text"/>
+<button class="absolute right-0 top-1/2 -translate-y-1/2 text-[11px] font-black uppercase tracking-widest hover:text-neutral-500">Apply</button>
+</div>
+</div>
+<button class="w-full bg-primary dark:bg-white text-white dark:text-primary py-5 text-sm font-black uppercase tracking-[0.2em] transition-all hover:opacity-90">
+                            Proceed to Checkout
+                        </button>
+<div class="mt-6 flex items-center justify-center gap-4 opacity-30 grayscale">
+<span class="material-symbols-outlined text-2xl">credit_card</span>
+<span class="material-symbols-outlined text-2xl">account_balance_wallet</span>
+<span class="material-symbols-outlined text-2xl">payments</span>
+</div>
+</div>
+</aside>
+</div>
+<!-- You May Also Need Section -->
+<section class="mt-24">
+<div class="flex items-end justify-between mb-8 border-b border-neutral-200 dark:border-neutral-800 pb-4">
+<h2 class="text-primary dark:text-white text-2xl font-black uppercase tracking-tight">You May Also Need</h2>
+<div class="flex gap-2">
+<button class="p-2 border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900">
+<span class="material-symbols-outlined text-sm">arrow_back_ios</span>
+</button>
+<button class="p-2 border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900">
+<span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+<div class="flex gap-6 overflow-x-auto pb-8 scrollbar-hide">
+<!-- Accessory 1 -->
+<div class="min-w-[240px] group cursor-pointer">
+<div class="aspect-[4/5] bg-neutral-100 dark:bg-neutral-900 overflow-hidden mb-4 rounded-sm border border-neutral-200 dark:border-neutral-800">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Silk knit tie in navy blue" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCsRK-PDDHfO8GtczPmv3l3e__V5Ch6zCCilomOvqbLJ-VezxSYNk1AttLN9BzgCTNNXTn--ZoFockwEDNyn-Z_i0jxO2c37Vswc00DoTHXCsv5WNNlG9ZXXYSFAdQWKpXnpRKnzw4Z39NSfsJtxWAgpm9FGoQk1psoZJh_1IOW-A0PxRNiaSxqY-dHlKkLfHEL19okhdFxIQ4f8tkjrrKn3Z2g0VvSrnbyhssCbAM1zyQbqIIzeJmPaElltz8jyUAniDpF2cLD4hok");'></div>
+</div>
+<h4 class="text-primary dark:text-white text-sm font-bold uppercase tracking-wide">Silk Knit Tie</h4>
+<p class="text-neutral-500 text-sm">$35.00</p>
+</div>
+<!-- Accessory 2 -->
+<div class="min-w-[240px] group cursor-pointer">
+<div class="aspect-[4/5] bg-neutral-100 dark:bg-neutral-900 overflow-hidden mb-4 rounded-sm border border-neutral-200 dark:border-neutral-800">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Premium cotton socks pack" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBxOGUA19rOiVu-hUmjDVjQV00JcBvCoorrfcwOz58fhTmiR92qLOXZc-TQTkXX97OwmtOIWZrzCXhVPa3L8LfKYHkXFQgif8k4P0hWhTFK_KImHm5cQWHUJhUITiwKUY_8MrxSqZ64x2sRx_6hR1VXRr2AOxUu2TPvI_3hMznJcjoRgtWeJMAjP9drgBMb5gRIx7HpRcVyILVuXQ_31Ko-2j4hH1ZGKZXJ26WU9cvuBxU4jROpexjwHz0b0h8kAZBFcvwjnw4n79-B");'></div>
+</div>
+<h4 class="text-primary dark:text-white text-sm font-bold uppercase tracking-wide">Cotton Sock Pack</h4>
+<p class="text-neutral-500 text-sm">$22.00</p>
+</div>
+<!-- Accessory 3 -->
+<div class="min-w-[240px] group cursor-pointer">
+<div class="aspect-[4/5] bg-neutral-100 dark:bg-neutral-900 overflow-hidden mb-4 rounded-sm border border-neutral-200 dark:border-neutral-800">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Leather belt with silver buckle" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDPyDCzIYS_osW4u6hJOo_rlxGBac_3bLblOjTIQxYj22iq5Nkr7xeO6pOuNy1crjK1zye2BoMfyK_bANk5dXv6AZtTzppI9EBkUMWxG9cPX5KcgDEjlYavdaFk7Km371yAW9Yftu3mEQJrjHrKopT4ZK-mnqeXWQFuKZHSTYBPT49HB7L3VuOfRZhLnhU8RUc9HmfeFDfOTukgOqT6LB3QGxWx4o3oRoPBHIFJjR70xsNNITIoxAAIEZdo6IawIAuLpxG7oqhPd81a");'></div>
+</div>
+<h4 class="text-primary dark:text-white text-sm font-bold uppercase tracking-wide">Pebbled Leather Belt</h4>
+<p class="text-neutral-500 text-sm">$48.00</p>
+</div>
+<!-- Accessory 4 -->
+<div class="min-w-[240px] group cursor-pointer">
+<div class="aspect-[4/5] bg-neutral-100 dark:bg-neutral-900 overflow-hidden mb-4 rounded-sm border border-neutral-200 dark:border-neutral-800">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="White uniform shirt detail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAPY3p1xUrpJxTJa2jQ_Zdha4DOU2iVEB6AtSPBN4eE499FEq39iOFMpYJbvTKDejDe9W1p9Ap6zBYyhcwhSyw_Lxs-VLhtdgfbmh_7zYlqswrw2Jl5Lfh9cVgTsg70DM2XElP7ZQIrIBzzOTLb1AhTlm41zxFXEbnl84ZsSv00u9m5Lv-nbEAQeYg_W_lZrosgM6i_Z_pkifstmsawy4HfnG-mFJ60WYTr0yjvXViB3qZqZxuta7FDc6zm1DxND81draYmn0pDdP4W");'></div>
+</div>
+<h4 class="text-primary dark:text-white text-sm font-bold uppercase tracking-wide">Oxford Cotton Shirt</h4>
+<p class="text-neutral-500 text-sm">$55.00</p>
+</div>
+<!-- Accessory 5 -->
+<div class="min-w-[240px] group cursor-pointer">
+<div class="aspect-[4/5] bg-neutral-100 dark:bg-neutral-900 overflow-hidden mb-4 rounded-sm border border-neutral-200 dark:border-neutral-800">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Grey school v-neck sweater" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC42U0uHkkbxbieQTegrKXvLSTanaudC43GJPEQXSaQxaQE7nzztQtg280IvY-ESdBOgQlKN8P4u_XgZAOLIOPdhh_0R5FjLBU7O3V8tX1PeBoaG_RNrewowGU_4fTnDiuvXB8JlexcC48NocwjWhxhwDGrnoZvUCfanGQF21fd8uPpnLYwj0hrUdd7rOHqcdVaZAcpZ0dQfMXh52vf0s2Q3w5DYPbzShFE1JfymytbbVx_SawS985fWSOY7abFsKfuMfA79yJJfPam");'></div>
+</div>
+<h4 class="text-primary dark:text-white text-sm font-bold uppercase tracking-wide">V-Neck Knit Sweater</h4>
+<p class="text-neutral-500 text-sm">$70.00</p>
+</div>
+</div>
+</section>
+</main>
+<footer class="mt-auto border-t border-neutral-200 dark:border-neutral-800 py-12 px-10">
+<div class="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-4 text-primary dark:text-white opacity-40">
+<h2 class="text-xs font-black tracking-widest uppercase">Uniform Editorial © 2024</h2>
+</div>
+<div class="flex gap-10">
+<a class="text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 hover:text-primary transition-colors" href="#">Terms</a>
+<a class="text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 hover:text-primary transition-colors" href="#">Shipping</a>
+<a class="text-[11px] font-bold uppercase tracking-[0.2em] text-neutral-400 hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>
