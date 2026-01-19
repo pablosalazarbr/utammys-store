@@ -97,11 +97,11 @@ function selectSchool(school) {
           class="group cursor-pointer"
         >
           <!-- Image -->
-          <div class="aspect-[4/5] overflow-hidden bg-neutral-100 mb-6 rounded-sm relative">
+          <div class="aspect-[4/5] overflow-hidden bg-neutral-100 mb-6 rounded-sm relative flex items-center justify-center">
             <img 
               :alt="school.name" 
               class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 group-hover:scale-105" 
-              :src="school.image"
+              :src="school.logo_url || school.image || 'https://images.unsplash.com/photo-1488161994519-c21cc028cb0d?w=400&h=500&fit=crop'"
             />
           </div>
 

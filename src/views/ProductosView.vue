@@ -128,6 +128,14 @@ const filteredProducts = computed(() => {
       <div class="absolute inset-0 bg-cover bg-center grayscale" :style="`background-image: url('https://media.gettyimages.com/id/1447981159/video/exterior-shot-of-elegant-large-brick-high-school-building-with-bright-green-lawn.jpg?s=640x640&k=20&c=mRuu2nfwDbsFskL-jv1dgvkYdBzZkH7rHu7zzY4U2LE=')`"></div>
       <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40"></div>
       <div class="relative h-full flex flex-col items-center justify-center text-center px-6">
+        <!-- School Logo -->
+        <div v-if="selectedClient.logo_url" class="mb-8">
+          <img 
+            :src="selectedClient.logo_url" 
+            :alt="selectedClient.name"
+            class="h-24 md:h-32 object-contain drop-shadow-lg"
+          />
+        </div>
         <h1 class="font-serif text-5xl md:text-7xl text-white mb-4 tracking-tight">{{ selectedClient.name }}</h1>
         <p class="text-white/90 text-sm md:text-base uppercase tracking-[0.2em] font-light max-w-2xl mb-12">
           Colección Oficial de Uniformes
@@ -268,7 +276,7 @@ const filteredProducts = computed(() => {
           </div>
 
           <!-- Right: Product Info -->
-          <div class="w-full lg:w-1/3 p-6 lg:p-12 lg:border-l border-border-soft flex flex-col justify-between">
+          <div class="w-full lg:w-1/3 p-6 lg:p-12 lg:border-l border-border-soft flex flex-col">
             <!-- Close Button -->
             <button 
               @click="closeModal"
@@ -277,59 +285,99 @@ const filteredProducts = computed(() => {
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
             </button>
 
-            <!-- Title & Price -->
-            <div class="space-y-4 border-b border-border-soft pb-8 mb-8">
+            <!-- 1. Product Name -->
+            <div class="mb-4">
               <h2 class="text-3xl font-serif leading-tight">{{ selectedProduct.name }}</h2>
-              <p class="text-lg text-neutral-500">{{ formatPrice(selectedPrice) }}</p>
             </div>
 
-            <!-- Selections -->
-            <div class="space-y-8 flex-1">
-              <!-- Size Selection -->
-              <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                  <p class="text-[10px] uppercase tracking-[0.2em] font-bold">Seleccionar Talla</p>
-                  <button class="text-[10px] uppercase tracking-[0.1em] underline underline-offset-4 hover:opacity-60 transition-opacity">Guía de Tallas</button>
+            <!-- 2. Ratings -->
+            <div class="mb-6 pb-6 border-b border-border-soft">
+              <div class="flex items-center gap-2">
+                <div class="flex items-center gap-1">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path>
+                  </svg>
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path>
+                  </svg>
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path>
+                  </svg>
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path>
+                  </svg>
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"></path>
+                  </svg>
                 </div>
-                <div class="grid grid-cols-4 gap-2">
-                  <button
-                    v-for="sizeObj in selectedProduct.sizes"
-                    :key="sizeObj.id || sizeObj.size"
-                    @click="selectedSize = sizeObj.size"
-                    :class="{
-                      'border-primary bg-primary text-white': selectedSize === sizeObj.size,
-                      'border-border-soft hover:border-primary text-primary': selectedSize !== sizeObj.size
-                    }"
-                    class="border py-3 text-xs font-semibold transition-all"
-                  >
-                    {{ sizeObj.size }}
-                  </button>
-                </div>
+                <span class="text-sm font-light text-neutral-600">5.0</span>
               </div>
+            </div>
 
-              <!-- Quantity -->
-              <div class="space-y-4">
-                <p class="text-[10px] uppercase tracking-[0.2em] font-bold">Cantidad</p>
-                <div class="inline-flex items-center border border-border-soft">
-                  <button 
-                    @click="quantity > 1 && quantity--"
-                    class="px-4 py-2 text-neutral-400 hover:text-primary transition-colors"
-                  >
-                    −
-                  </button>
-                  <span class="px-4 py-2 text-sm font-semibold w-12 text-center">{{ quantity }}</span>
-                  <button 
-                    @click="quantity++"
-                    class="px-4 py-2 text-neutral-400 hover:text-primary transition-colors"
-                  >
-                    +
-                  </button>
-                </div>
+            <!-- 3. Price -->
+            <div class="mb-6 pb-6 border-b border-border-soft">
+              <p class="text-lg font-semibold text-primary">{{ formatPrice(selectedPrice) }}</p>
+            </div>
+
+            <!-- 4. Short Description -->
+            <div class="mb-6 pb-6 border-b border-border-soft">
+              <p class="text-sm font-light text-neutral-600 leading-relaxed">
+                {{ selectedProduct.description || 'Producto de alta calidad diseñado especialmente para uniformes escolares y empresariales.' }}
+              </p>
+            </div>
+
+            <!-- 5. Long Description (Details) -->
+            <div v-if="selectedProduct.long_description" class="mb-6 pb-6 border-b border-border-soft">
+              <p class="text-[10px] uppercase tracking-[0.2em] font-bold mb-3">Detalles</p>
+              <p class="text-sm font-light text-neutral-600 leading-relaxed whitespace-pre-line">
+                {{ selectedProduct.long_description }}
+              </p>
+            </div>
+
+            <!-- Size Selection -->
+            <div class="space-y-4 mb-8">
+              <div class="flex justify-between items-center">
+                <p class="text-[10px] uppercase tracking-[0.2em] font-bold">Seleccionar Talla</p>
+                <button class="text-[10px] uppercase tracking-[0.1em] underline underline-offset-4 hover:opacity-60 transition-opacity">Guía de Tallas</button>
+              </div>
+              <div class="grid grid-cols-4 gap-2">
+                <button
+                  v-for="sizeObj in selectedProduct.sizes"
+                  :key="sizeObj.id || sizeObj.size"
+                  @click="selectedSize = sizeObj.size"
+                  :class="{
+                    'border-primary bg-primary text-white': selectedSize === sizeObj.size,
+                    'border-border-soft hover:border-primary text-primary': selectedSize !== sizeObj.size
+                  }"
+                  class="border py-3 text-xs font-semibold transition-all"
+                >
+                  {{ sizeObj.size }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Quantity -->
+            <div class="space-y-4 mb-8">
+              <p class="text-[10px] uppercase tracking-[0.2em] font-bold">Cantidad</p>
+              <div class="inline-flex items-center border border-border-soft">
+                <button 
+                  @click="quantity > 1 && quantity--"
+                  class="px-4 py-2 text-neutral-400 hover:text-primary transition-colors"
+                >
+                  −
+                </button>
+                <span class="px-4 py-2 text-sm font-semibold w-12 text-center">{{ quantity }}</span>
+                <button 
+                  @click="quantity++"
+                  class="px-4 py-2 text-neutral-400 hover:text-primary transition-colors"
+                >
+                  +
+                </button>
               </div>
             </div>
 
             <!-- CTA -->
-            <div class="space-y-4 mt-8 pt-8 border-t border-border-soft">
+            <div class="space-y-4 mt-auto">
               <button 
                 @click="addToCart"
                 class="w-full bg-primary text-white py-4 text-xs font-bold uppercase tracking-[0.3em] hover:bg-black/90 transition-all"
@@ -342,14 +390,6 @@ const filteredProducts = computed(() => {
               >
                 Continuar Comprando
               </button>
-            </div>
-
-            <!-- Product Description -->
-            <div class="mt-8 pt-8 border-t border-border-soft">
-              <p class="text-[10px] uppercase tracking-[0.2em] font-bold mb-4">Descripción</p>
-              <p class="text-sm font-light text-neutral-600 leading-relaxed">
-                {{ selectedProduct.description || 'Producto de alta calidad diseñado especialmente para uniformes escolares y empresariales.' }}
-              </p>
             </div>
           </div>
         </div>
