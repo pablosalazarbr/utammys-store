@@ -12,7 +12,7 @@ const clientsStore = useClientsStore()
 const cartStore = useCartStore()
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
-const API_BASE_URL = API_URL.replace('/api', '')
+const API_BASE_URL = API_URL.replace(/\/api$/, '')
 
 const selectedProduct = ref(null)
 const selectedSize = ref('')
@@ -20,6 +20,8 @@ const quantity = ref(1)
 const selectedClient = ref(null)
 const selectedPrice = ref(null)
 const selectedCategory = ref('Todos')
+const selectedImageIndex = ref(0)
+const lightboxOpen = ref(false)
 
 const getImageUrl = (mediaPath) => {
   if (!mediaPath) {
@@ -27,6 +29,33 @@ const getImageUrl = (mediaPath) => {
   }
   return `${API_BASE_URL}${mediaPath}`
 }
+
+// Obtener array de todas las imágenes disponibles del producto
+const productImages = computed(() => {
+  if (!selectedProduct.value?.media) return []
+  
+  const images = []
+  const mediaObj = selectedProduct.value.media
+  
+  // Agregar en orden: main, detail_1, detail_2, etc.
+  if (mediaObj.main) images.push(mediaObj.main)
+  if (mediaObj.detail_1) images.push(mediaObj.detail_1)
+  if (mediaObj.detail_2) images.push(mediaObj.detail_2)
+  
+  return images
+})
+
+// Obtener la imagen principal actual
+const currentMainImage = computed(() => {
+  const images = productImages.value
+  return images.length > 0 ? images[selectedImageIndex.value] : selectedProduct.value?.media?.main
+})
+
+// Obtener la talla seleccionada actualmente
+const selectedSizeObj = computed(() => {
+  if (!selectedProduct.value?.sizes || !selectedSize.value) return null
+  return selectedProduct.value.sizes.find(s => s.size === selectedSize.value)
+})
 
 onMounted(async () => {
   // Cargar cliente guardado
@@ -63,6 +92,7 @@ function selectProduct(product) {
   selectedSize.value = product.sizes?.[0]?.size || ''
   selectedPrice.value = product.sizes?.[0]?.price || 0
   quantity.value = 1
+  selectedImageIndex.value = 0
 }
 
 function closeModal() {
@@ -70,6 +100,30 @@ function closeModal() {
   selectedSize.value = ''
   selectedPrice.value = null
   quantity.value = 1
+  selectedImageIndex.value = 0
+  lightboxOpen.value = false
+}
+
+function openLightbox() {
+  lightboxOpen.value = true
+}
+
+function closeLightbox() {
+  lightboxOpen.value = false
+}
+
+function nextImage() {
+  const images = productImages.value
+  if (images.length > 0) {
+    selectedImageIndex.value = (selectedImageIndex.value + 1) % images.length
+  }
+}
+
+function prevImage() {
+  const images = productImages.value
+  if (images.length > 0) {
+    selectedImageIndex.value = (selectedImageIndex.value - 1 + images.length) % images.length
+  }
 }
 
 function addToCart() {
@@ -255,20 +309,34 @@ const filteredProducts = computed(() => {
             </nav>
 
             <!-- Main Image -->
-            <div class="aspect-[3/4] w-full bg-accent-grey overflow-hidden mb-4">
+            <div class="aspect-[3/4] w-full bg-accent-grey overflow-hidden mb-4 cursor-pointer group relative" @click="openLightbox">
               <img 
-                :src="getImageUrl(selectedProduct.media?.main)" 
+                :src="getImageUrl(currentMainImage)" 
                 :alt="selectedProduct.name"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+              </div>
             </div>
 
             <!-- Thumbnail Grid -->
-            <div class="grid grid-cols-3 gap-3">
-              <div v-for="i in 3" :key="i" class="aspect-[3/4] bg-accent-grey overflow-hidden cursor-pointer hover:opacity-70 transition-opacity">
+            <div v-if="productImages.length > 0" class="grid grid-cols-3 gap-3">
+              <div 
+                v-for="(image, index) in productImages" 
+                :key="index" 
+                @click="selectedImageIndex = index"
+                :class="{
+                  'ring-2 ring-primary': selectedImageIndex === index,
+                  'ring-2 ring-transparent': selectedImageIndex !== index
+                }"
+                class="aspect-[3/4] bg-accent-grey overflow-hidden cursor-pointer hover:opacity-70 transition-all"
+              >
                 <img 
-                  :src="getImageUrl(selectedProduct.media?.main)" 
-                  :alt="`Detail ${i}`"
+                  :src="getImageUrl(image)" 
+                  :alt="`Detail ${index + 1}`"
                   class="w-full h-full object-cover"
                 />
               </div>
@@ -288,6 +356,7 @@ const filteredProducts = computed(() => {
             <!-- 1. Product Name -->
             <div class="mb-4">
               <h2 class="text-3xl font-serif leading-tight">{{ selectedProduct.name }}</h2>
+              <p v-if="selectedSizeObj.sku" class="text-sm text-neutral-400 mt-2">{{ selectedSizeObj.sku }}</p>
             </div>
 
             <!-- 2. Ratings -->
@@ -314,9 +383,9 @@ const filteredProducts = computed(() => {
               </div>
             </div>
 
-            <!-- 3. Price -->
-            <div class="mb-6 pb-6 border-b border-border-soft">
-              <p class="text-lg font-semibold text-primary">{{ formatPrice(selectedPrice) }}</p>
+            <!-- 3. Price & Size SKU -->
+            <div class="mb-6 pb-6 border-b border-border-soft space-y-2">
+              <p class="text-lg font-semibold text-primary">{{ formatPrice(selectedSizeObj.price) }}</p>
             </div>
 
             <!-- 4. Short Description -->
@@ -391,6 +460,53 @@ const filteredProducts = computed(() => {
                 Continuar Comprando
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <!-- Image Lightbox Modal -->
+    <transition name="modal-fade">
+      <div v-if="lightboxOpen && selectedProduct" class="fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4" @click="closeLightbox">
+        <div class="relative w-full h-full flex items-center justify-center" @click.stop>
+          <!-- Close Button -->
+          <button 
+            @click="closeLightbox"
+            class="absolute top-6 right-6 text-white hover:text-neutral-300 transition-colors z-10"
+          >
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+
+          <!-- Main Image -->
+          <div class="max-w-4xl max-h-[90vh] flex items-center justify-center">
+            <img 
+              :src="getImageUrl(currentMainImage)" 
+              :alt="selectedProduct.name"
+              class="max-h-[90vh] max-w-full object-contain"
+            />
+          </div>
+
+          <!-- Previous Button -->
+          <button 
+            v-if="productImages.length > 1"
+            @click="prevImage"
+            class="absolute left-6 top-1/2 -translate-y-1/2 text-white hover:text-neutral-300 transition-colors p-2 bg-black/30 rounded-full hover:bg-black/50"
+          >
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+          </button>
+
+          <!-- Next Button -->
+          <button 
+            v-if="productImages.length > 1"
+            @click="nextImage"
+            class="absolute right-6 top-1/2 -translate-y-1/2 text-white hover:text-neutral-300 transition-colors p-2 bg-black/30 rounded-full hover:bg-black/50"
+          >
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+          </button>
+
+          <!-- Image Counter -->
+          <div v-if="productImages.length > 1" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-white text-sm bg-black/50 px-4 py-2 rounded-full">
+            {{ selectedImageIndex + 1 }} / {{ productImages.length }}
           </div>
         </div>
       </div>

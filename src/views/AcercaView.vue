@@ -14,7 +14,7 @@ import { ref } from 'vue'
           <span class="italic">calidad guatemalteca</span>
         </h1>
         <p class="text-xl text-neutral-600 font-light max-w-lg leading-relaxed">
-          12 años de experiencia transformando uniformes escolares y empresariales con diseño moderno, comodidad y los más altos estándares de calidad.
+          20 años de experiencia transformando uniformes escolares y empresariales con diseño moderno, comodidad y los más altos estándares de calidad.
         </p>
       </div>
     </section>
@@ -26,7 +26,7 @@ import { ref } from 'vue'
           <div>
             <h2 class="text-4xl font-serif mb-6">Nuestra Historia</h2>
             <p class="text-lg text-neutral-600 font-light leading-relaxed mb-6">
-              Somos una empresa 100% guatemalteca con 12 años de experiencia en el mercado de confección de uniformes con los más altos estándares de calidad. Desde nuestros inicios, hemos buscado romper y evolucionar el esquema tradicional de uniformes.
+              Somos una empresa 100% guatemalteca con 20 años de experiencia en el mercado de confección de uniformes con los más altos estándares de calidad. Desde nuestros inicios, hemos buscado romper y evolucionar el esquema tradicional de uniformes.
             </p>
             <p class="text-lg text-neutral-600 font-light leading-relaxed">
               Nuestro compromiso es ofrecerte prendas que combinan diseño moderno, comodidad excepcional y durabilidad garantizada. Cada uniforme es creado con atención al detalle y pasión por la excelencia.
