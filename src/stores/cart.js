@@ -9,7 +9,7 @@ export const useCartStore = defineStore('cart', () => {
 
   // Mock API URL
   const API_URL = import.meta.env.VITE_API_URL || 'https://api.example.com'
-  const API_BASE_URL = API_URL.replace('/api', '')
+  const API_BASE_URL = API_URL.replace(/\/api$/, '')
 
   // Computed
   const itemCount = computed(() => {
@@ -28,8 +28,18 @@ export const useCartStore = defineStore('cart', () => {
     return `${API_BASE_URL}${mediaPath}`
   }
 
-  function addItem(product, size, quantity = 1) {
-    const existingItem = items.value.find((item) => item.id === product.id && item.size === size)
+  function addItem(product, size, quantity = 1, customization = null) {
+    // Obtener el objeto de la talla seleccionada
+    const sizeObj = product.sizes.find(s => s.size === size)
+    const price = sizeObj ? parseFloat(sizeObj.price) : product.price
+    
+    // Calcular el precio total con personalización
+    let totalPrice = price
+    if (customization?.customizationCost) {
+      totalPrice += customization.customizationCost
+    }
+    
+    const existingItem = items.value.find((item) => item.id === product.id && item.size === size && item.customizationText === customization?.customizationText)
 
     if (existingItem) {
       existingItem.quantity += quantity
@@ -37,11 +47,16 @@ export const useCartStore = defineStore('cart', () => {
       items.value.push({
         id: product.id,
         name: product.name,
-        price: product.price,
+        description: product.description,
+        price: price,
+        totalPrice: totalPrice,
         image: getImageUrl(product.media?.main),
         size,
         quantity,
-        category: product.category,
+        category: product.category?.name || 'Sin categoría',
+        customization: customization,
+        customizationText: customization?.customizationText || null,
+        customizationCost: customization?.customizationCost || 0,
       })
     }
   }

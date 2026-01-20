@@ -22,6 +22,9 @@ const selectedPrice = ref(null)
 const selectedCategory = ref('Todos')
 const selectedImageIndex = ref(0)
 const lightboxOpen = ref(false)
+const showNotification = ref(false)
+const notificationMessage = ref('')
+const customizationText = ref('')
 
 const getImageUrl = (mediaPath) => {
   if (!mediaPath) {
@@ -55,6 +58,47 @@ const currentMainImage = computed(() => {
 const selectedSizeObj = computed(() => {
   if (!selectedProduct.value?.sizes || !selectedSize.value) return null
   return selectedProduct.value.sizes.find(s => s.size === selectedSize.value)
+})
+
+// Ordenar tallas de menor a mayor (números primero, luego letras)
+const sortedSizes = computed(() => {
+  if (!selectedProduct.value?.sizes) return []
+  
+  const sizeOrder = {
+    '4': 1, '6': 2, '8': 3, '10': 4, '12': 5, '14': 6, '16': 7,
+    'XS': 8, 'S': 9, 'M': 10, 'L': 11, 'XL': 12
+  }
+  
+  return [...selectedProduct.value.sizes].sort((a, b) => {
+    const orderA = sizeOrder[a.size] ?? 999
+    const orderB = sizeOrder[b.size] ?? 999
+    return orderA - orderB
+  })
+})
+
+// Calcular cantidad de palabras en la personalización
+const customizationWordCount = computed(() => {
+  return customizationText.value.trim() === '' ? 0 : customizationText.value.trim().split(/\s+/).length
+})
+
+// Calcular costo de personalización
+const customizationCost = computed(() => {
+  if (!selectedProduct.value?.is_customizable || customizationText.value.trim() === '') {
+    return 0
+  }
+  
+  const wordCount = customizationWordCount.value
+  if (wordCount <= 2) {
+    return 25
+  }
+  // Q12.50 por cada palabra adicional después de las primeras 2
+  const additionalWords = wordCount - 2
+  return 25 + (additionalWords * 12.5)
+})
+
+// Precio total incluyendo personalización
+const totalPriceWithCustomization = computed(() => {
+  return selectedPrice.value + customizationCost.value
 })
 
 onMounted(async () => {
@@ -132,9 +176,17 @@ function addToCart() {
     return
   }
   for (let i = 0; i < quantity.value; i++) {
-    cartStore.addItem(selectedProduct.value, selectedSize.value)
+    cartStore.addItem(selectedProduct.value, selectedSize.value, 1, {
+      isCustomizable: selectedProduct.value.is_customizable,
+      customizationText: customizationText.value,
+      customizationCost: customizationCost.value
+    })
   }
-  alert(`${quantity.value} producto(s) agregado(s) al carrito`)
+  notificationMessage.value = `${quantity.value} producto(s) agregado(s) al carrito`
+  showNotification.value = true
+  setTimeout(() => {
+    showNotification.value = false
+  }, 3000)
   closeModal()
 }
 
@@ -177,6 +229,14 @@ const filteredProducts = computed(() => {
 
 <template>
   <main class="flex-1">
+    <!-- Notification Toast -->
+    <transition name="slide-down">
+      <div v-if="showNotification" class="fixed top-6 right-6 z-[100] bg-green-50 border border-green-200 text-green-700 px-6 py-4 rounded-sm shadow-lg flex items-center gap-3">
+        <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+        <span class="font-semibold text-sm">{{ notificationMessage }}</span>
+      </div>
+    </transition>
+
     <!-- School Hero Section -->
     <section v-if="selectedClient" class="relative h-[75vh] w-full overflow-hidden bg-neutral-100">
       <div class="absolute inset-0 bg-cover bg-center grayscale" :style="`background-image: url('https://media.gettyimages.com/id/1447981159/video/exterior-shot-of-elegant-large-brick-high-school-building-with-bright-green-lawn.jpg?s=640x640&k=20&c=mRuu2nfwDbsFskL-jv1dgvkYdBzZkH7rHu7zzY4U2LE=')`"></div>
@@ -411,7 +471,7 @@ const filteredProducts = computed(() => {
               </div>
               <div class="grid grid-cols-4 gap-2">
                 <button
-                  v-for="sizeObj in selectedProduct.sizes"
+                  v-for="sizeObj in sortedSizes"
                   :key="sizeObj.id || sizeObj.size"
                   @click="selectedSize = sizeObj.size"
                   :class="{
@@ -442,6 +502,34 @@ const filteredProducts = computed(() => {
                 >
                   +
                 </button>
+              </div>
+            </div>
+
+            <!-- Customization Section -->
+            <div v-if="selectedProduct.is_customizable" class="mb-8 pb-8 border-b border-border-soft space-y-4">
+              <div class="bg-blue-50 border border-blue-200 p-4 rounded-sm space-y-3">
+                <div class="flex items-start gap-2">
+                  <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zm-11-1a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"></path></svg>
+                  <div>
+                    <p class="text-sm font-bold text-blue-900">Personaliza tu Prenda ({{ customizationCost > 0 ? '+Q' + customizationCost.toFixed(2) : '+Q25.00' }})</p>
+                    <p class="text-xs text-blue-700 mt-1">Borda 1 Nombre y 1 Apellido ó 2 Apellidos</p>
+                    <p class="text-xs text-blue-700">Palabras adicionales: Q12.50 c/u</p>
+                  </div>
+                </div>
+                
+                <input 
+                  v-model="customizationText"
+                  type="text"
+                  placeholder="Ej: Juan Salazar"
+                  class="w-full px-3 py-2 border border-border-soft rounded-sm text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                />
+                
+                <div v-if="customizationText.trim()" class="text-xs text-blue-700">
+                  <p>Palabras: {{ customizationWordCount }}</p>
+                  <p v-if="customizationWordCount > 2" class="text-blue-900 font-semibold">
+                    Costo adicional: Q{{ (customizationCost - 25).toFixed(2) }}
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -522,6 +610,21 @@ const filteredProducts = computed(() => {
 
 .modal-fade-enter-from,
 .modal-fade-leave-to {
+  opacity: 0;
+}
+
+.slide-down-enter-active,
+.slide-down-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-down-enter-from {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+.slide-down-leave-to {
+  transform: translateY(-20px);
   opacity: 0;
 }
 </style>

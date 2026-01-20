@@ -93,8 +93,16 @@ async function handleCheckout() {
                   <!-- Product Details -->
                   <td class="py-8 px-6">
                     <h3 class="text-primary font-semibold">{{ item.name }}</h3>
-                    <p class="text-neutral-500 text-sm mt-1">Talla: {{ item.size }} | Categoría: {{ item.category }}</p>
-                    <p class="text-neutral-400 text-xs mt-4 font-light">{{ item.price }}</p>
+                    <p class="text-neutral-500 text-sm mt-2">{{ item.description }}</p>
+                    <p class="text-neutral-400 text-xs mt-2">Talla: {{ item.size }} | Categoría: {{ item.category }}</p>
+                    
+                    <!-- Customization Info -->
+                    <div v-if="item.customizationText" class="mt-3 pt-3 border-t border-neutral-200">
+                      <p class="text-xs font-semibold text-blue-600">Personaliza tu Prenda - {{ item.customizationText }}</p>
+                      <p class="text-xs text-blue-600">+{{ formatPrice(item.customizationCost) }}</p>
+                    </div>
+                    
+                    <p class="text-primary font-semibold text-sm mt-4">{{ formatPrice(item.price) }}</p>
                   </td>
 
                   <!-- Quantity -->
@@ -119,7 +127,7 @@ async function handleCheckout() {
                   <!-- Total & Remove -->
                   <td class="py-8 text-right pr-6">
                     <div class="flex items-center justify-between">
-                      <span class="font-semibold text-primary">{{ formatPrice(item.price * item.quantity) }}</span>
+                      <span class="font-semibold text-primary">{{ formatPrice((item.price + item.customizationCost) * item.quantity) }}</span>
                       <button 
                         @click="cartStore.removeItem(item.id, item.size)"
                         class="text-neutral-400 hover:text-red-500 transition-colors ml-4"
