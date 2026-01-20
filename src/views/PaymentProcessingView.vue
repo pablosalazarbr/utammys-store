@@ -55,8 +55,31 @@ onMounted(async () => {
 
     if (orderResponse.data.success) {
       console.log('✅ Orden creada exitosamente:', orderResponse.data.data.order_id)
+      
+      // Esperar a que el webhook verifique el stock (máximo 20 segundos, 2 segundos entre requests)
+      console.log('⏳ Esperando confirmación del webhook...')
+      for (let i = 0; i < 10; i++) {
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        
+        try {
+          const checkResponse = await axios.get(`${API_URL}/shop/orders/latest`, {
+            params: { email: email }
+          })
+          
+          if (checkResponse.data.success) {
+            const order = checkResponse.data.data
+            if (order.payment_status === 'completed') {
+              console.log('✅ Webhook confirmado! Status:', order.status)
+              break
+            }
+          }
+        } catch (err) {
+          console.log('⏳ Esperando webhook...')
+        }
+      }
+      
       status.value = 'success'
-      message.value = 'Pago procesado, orden creada'
+      message.value = 'Pago procesado exitosamente. Recibirás la confirmación de tu pedido en tu correo electrónico.'
       
       // Limpiar localStorage
       localStorage.removeItem('checkout_session_id')
@@ -71,14 +94,6 @@ onMounted(async () => {
       
       // Limpiar carrito
       cartStore.clearCart()
-      
-      // Redirigir a checkout success en 2 segundos
-      setTimeout(() => {
-        router.push({ 
-          path: '/checkout/success', 
-          query: { order_id: orderResponse.data.data.order_id }
-        })
-      }, 2000)
     } else {
       throw new Error(orderResponse.data.message || 'Failed to create order')
     }
