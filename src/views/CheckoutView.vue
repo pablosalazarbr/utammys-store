@@ -528,7 +528,7 @@ function formatPrice(price) {
               
               <div class="bg-blue-50 border border-blue-200 p-4 rounded-sm mb-8">
                 <p class="text-sm text-blue-900">
-                  <strong>Nota:</strong> Por el momento solo aceptamos pagos con tarjeta de crédito o débito. Tu información de tarjeta se procesa de forma segura a través de Recurrente.
+                  <strong>Nota:</strong> Tu información de tarjeta se procesa de forma segura a través de Recurrente.
                 </p>
               </div>
 

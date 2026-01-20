@@ -12,7 +12,7 @@ const featuredProducts = ref([])
 const loadingFeatured = ref(false)
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
-const API_BASE_URL = API_URL.replace('/api', '')
+const API_BASE_URL = API_URL.replace(/\/api$/, '')
 
 const getImageUrl = (mediaPath) => {
   if (!mediaPath) {
