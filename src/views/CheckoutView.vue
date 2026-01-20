@@ -209,17 +209,125 @@ function loadEmbeddedCheckout(checkoutUrl) {
     iframe.style.border = 'none'
     iframe.style.borderRadius = '8px'
     iframe.setAttribute('allow', 'payment')
-    // Permitir navegación top-level para que las redirecciones funcionen
-    iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation-by-user-activation')
+    // Permitir navegación top-level y scripts para comunicación cross-origin
+    iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation')
     iframe.id = 'recurrente-checkout-iframe'
     
     embeddedCheckoutContainer.appendChild(iframe)
     console.log('✅ Iframe de checkout creado')
+    console.log('📍 Listeners configurados:')
+    console.log('   - PostMessage (para eventos de Recurrente)')
+    console.log('   - Load event (para detectar redirecciones)')
+
+    // ============================================
+    // LISTENER 1: PostMessage (Comunicación con Recurrente)
+    // ============================================
+    const handlePostMessage = (event) => {
+      // Aceptar mensajes de Recurrente
+      if (!event.origin.includes('recurrente.com') && event.origin !== window.location.origin) {
+        return
+      }
+
+      console.log('📨 PostMessage recibido:', event.data)
+
+      // Éxito del pago
+      if (event.data.type === 'payment:success' || event.data.status === 'success') {
+        console.log('✅ Pago exitoso detectado por PostMessage')
+        handlePaymentSuccess(event.data)
+        window.removeEventListener('message', handlePostMessage)
+        return
+      }
+
+      // Cancelación del pago
+      if (event.data.type === 'payment:cancel' || event.data.status === 'cancel') {
+        console.log('❌ Pago cancelado detectado por PostMessage')
+        handlePaymentCanceled()
+        window.removeEventListener('message', handlePostMessage)
+        return
+      }
+
+      // Error en el pago
+      if (event.data.type === 'payment:error' || event.data.error) {
+        console.error('⚠️ Error en pago:', event.data.error)
+        paymentError.value = event.data.error || 'Error procesando el pago'
+        window.removeEventListener('message', handlePostMessage)
+        return
+      }
+    }
+
+    window.addEventListener('message', handlePostMessage)
+
+    // ============================================
+    // LISTENER 2: Load event (Detectar redirecciones)
+    // ============================================
+    iframe.onload = () => {
+      console.log('📄 Iframe cargado, monitoreando cambios de URL...')
+      
+      // Intentar acceder a la URL del iframe (puede fallar por CORS, pero lo intentamos)
+      let lastUrl = iframe.src
+      
+      const checkIframeUrl = setInterval(() => {
+        try {
+          const currentUrl = iframe.contentWindow.location.href
+          
+          if (currentUrl !== lastUrl) {
+            console.log('🔄 URL del iframe cambió:', currentUrl)
+            lastUrl = currentUrl
+            
+            // Detectar redirección a success
+            if (currentUrl.includes('/checkout/payment-processing')) {
+              console.log('✅ Detectada redirección a payment-processing (éxito)')
+              clearInterval(checkIframeUrl)
+              // Navegar a la página de confirmación
+              handlePaymentSuccessRedirect()
+              return
+            }
+            
+            // Detectar redirección a cancel
+            if (currentUrl.includes('/carrito')) {
+              console.log('❌ Detectada redirección a /carrito (cancelación)')
+              clearInterval(checkIframeUrl)
+              handlePaymentCanceled()
+              return
+            }
+          }
+        } catch (e) {
+          // CORS - no podemos acceder a la URL del iframe
+          // Esto es normal en producción si los dominios son diferentes
+          // console.log('⚠️ CORS: No se puede acceder a la URL del iframe')
+        }
+      }, 500)
+
+      // Limpiar el intervalo si el usuario abandona la página
+      window.addEventListener('beforeunload', () => {
+        clearInterval(checkIframeUrl)
+        window.removeEventListener('message', handlePostMessage)
+      })
+    }
     
   } catch (error) {
     console.error('❌ Error cargando embedded checkout:', error)
     paymentError.value = 'Error cargando formulario de pago'
   }
+}
+
+// Manejar redirección exitosa del pago
+async function handlePaymentSuccessRedirect() {
+  console.log('🎯 Navegando a payment-processing desde evento del iframe')
+  await router.push('/checkout/payment-processing')
+}
+
+// Manejar cancelación del pago
+function handlePaymentCanceled() {
+  console.log('🛑 Usuario canceló el pago, regresando al carrito')
+  currentStep.value = 1
+  checkoutSessionId.value = null
+  paymentError.value = ''
+  localStorage.removeItem('checkout_session_id')
+  localStorage.removeItem('checkout_url')
+  localStorage.removeItem('checkout_email')
+  // Navegar al carrito
+  router.push('/carrito')
 }
 
 // Manejar éxito del pago

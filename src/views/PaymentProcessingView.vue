@@ -17,8 +17,9 @@ onMounted(async () => {
     
     console.log('📊 Payment processing page - status:', queryStatus)
     
-    // Recuperar email del checkout anterior
+    // Recuperar email y checkout_id del checkout anterior
     const email = localStorage.getItem('checkout_email')
+    const checkoutId = localStorage.getItem('checkout_session_id')
     
     if (!email) {
       throw new Error('No email found')
@@ -27,12 +28,49 @@ onMounted(async () => {
     // Esperar un poco para que el webhook procese
     await new Promise(resolve => setTimeout(resolve, 2000))
     
-    // Verificar que se creó la orden
-    const response = await axios.get(`${API_URL}/shop/orders/latest`, {
-      params: { email }
-    })
+    // Intentar obtener la orden (máximo 15 intentos)
+    let response = null
+    let orderFound = false
     
-    if (response.data.success) {
+    for (let attempt = 0; attempt < 15; attempt++) {
+      try {
+        response = await axios.get(`${API_URL}/shop/orders/latest`, {
+          params: { email }
+        })
+        
+        if (response.data.success) {
+          orderFound = true
+          console.log('✅ Orden encontrada en intento:', attempt + 1)
+          break
+        }
+      } catch (err) {
+        console.log(`Intento ${attempt + 1}/15: Orden no encontrada aún`)
+        if (attempt < 14) {
+          await new Promise(resolve => setTimeout(resolve, 1000))
+        }
+      }
+    }
+    
+    // Si no se encontró la orden por polling, intentar verificar directamente con Recurrente
+    if (!orderFound && checkoutId) {
+      console.log('⚠️ Orden no encontrada por polling, verificando con Recurrente...')
+      
+      try {
+        response = await axios.post(`${API_URL}/orders/verify-and-create-from-checkout`, {
+          checkout_id: checkoutId,
+          email: email
+        })
+        
+        if (response.data.success) {
+          orderFound = true
+          console.log('✅ Orden creada desde verificación de Recurrente')
+        }
+      } catch (err) {
+        console.error('❌ Error verificando con Recurrente:', err.message)
+      }
+    }
+    
+    if (orderFound && response?.data?.success) {
       console.log('✅ Orden encontrada:', response.data.data.order_id)
       status.value = 'success'
       message.value = 'Pago completado exitosamente'
@@ -50,7 +88,7 @@ onMounted(async () => {
         })
       }, 2000)
     } else {
-      throw new Error('Order not found')
+      throw new Error('Order not found after verification')
     }
     
   } catch (error) {
