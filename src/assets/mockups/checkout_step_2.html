@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout - Payment &amp; Billing | Uniform Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1a1a1a",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#191919",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+<style>body {
+    font-family: "Inter", sans-serif
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+input[type="radio"]:checked {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCRsbuB-k02WtsUSItVKgQyP4W91z55G7eSkSrBrcpW7jLcfcKBwOXaLl3rAugHppCbFwBd86uHMRU67XD7KdO0OtNRl21rWU-eZrIUuyFdQWi5YwSjFWm-sUmnbWmOW4BXCFH6uvZBRog3zPnVlP3Ak1_l-FQ4CuItIzwXwTKtai-65i6UxfQkoJ3DI_kV2ntzA8kTLdFPckspkV6AFPhbFQ1oBu7Oxpqcm805wvc8-rvF36A2SS3XeX7ERpkCWrj8GaQ_GK4M16Mc)
+    }</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-primary dark:text-white transition-colors duration-200">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-neutral-200 dark:border-neutral-800 px-6 md:px-20 py-4 bg-white dark:bg-background-dark">
+<div class="flex items-center gap-4">
+<div class="size-6 text-primary dark:text-white">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-tight uppercase">Uniform Atelier</h2>
+</div>
+<div class="flex items-center gap-8">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-xs font-semibold uppercase tracking-widest hover:opacity-70 transition-opacity" href="#">Shop</a>
+<a class="text-xs font-semibold uppercase tracking-widest hover:opacity-70 transition-opacity" href="#">Collections</a>
+<a class="text-xs font-semibold uppercase tracking-widest hover:opacity-70 transition-opacity" href="#">Sizing</a>
+</nav>
+<button class="flex items-center justify-center rounded p-2 bg-neutral-100 dark:bg-neutral-800 text-primary dark:text-white hover:bg-neutral-200 transition-colors">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-6 md:px-10 py-10">
+<!-- Breadcrumbs -->
+<div class="flex flex-wrap gap-2 mb-8">
+<a class="text-neutral-400 dark:text-neutral-500 text-xs font-bold uppercase tracking-widest flex items-center gap-2" href="#">01 Shipping <span class="material-symbols-outlined text-sm">chevron_right</span></a>
+<span class="text-primary dark:text-white text-xs font-bold uppercase tracking-widest flex items-center gap-2">02 Payment <span class="material-symbols-outlined text-sm">chevron_right</span></span>
+<span class="text-neutral-300 dark:text-neutral-700 text-xs font-bold uppercase tracking-widest">03 Review</span>
+</div>
+<div class="flex flex-col lg:flex-row gap-16">
+<!-- Left Side: Payment & Billing Form -->
+<div class="flex-1">
+<h1 class="text-3xl font-bold tracking-tight mb-8">Payment &amp; Billing</h1>
+<section class="mb-10">
+<h3 class="text-sm font-bold uppercase tracking-widest mb-4">Select Payment Method</h3>
+<div class="flex flex-col gap-3">
+<label class="flex items-center gap-4 rounded border border-solid border-neutral-200 dark:border-neutral-800 p-4 bg-white dark:bg-neutral-900 cursor-pointer hover:border-primary dark:hover:border-neutral-500 transition-all">
+<input checked="" class="h-4 w-4 border-2 border-neutral-300 dark:border-neutral-700 bg-transparent text-primary checked:bg-primary focus:ring-0 focus:ring-offset-0" name="payment-method" type="radio"/>
+<div class="flex grow items-center justify-between">
+<p class="text-sm font-medium">Credit Card</p>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-xl opacity-60">credit_card</span>
+</div>
+</div>
+</label>
+<label class="flex items-center gap-4 rounded border border-solid border-neutral-200 dark:border-neutral-800 p-4 bg-white dark:bg-neutral-900 cursor-pointer hover:border-primary dark:hover:border-neutral-500 transition-all">
+<input class="h-4 w-4 border-2 border-neutral-300 dark:border-neutral-700 bg-transparent text-primary checked:bg-primary focus:ring-0 focus:ring-offset-0" name="payment-method" type="radio"/>
+<div class="flex grow items-center justify-between">
+<p class="text-sm font-medium">Digital Wallet (Apple Pay / PayPal)</p>
+<span class="material-symbols-outlined text-xl opacity-60">account_balance_wallet</span>
+</div>
+</label>
+</div>
+</section>
+<section class="mb-10">
+<h3 class="text-sm font-bold uppercase tracking-widest mb-4">Card Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="md:col-span-2">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-1">Cardholder Name</label>
+<input class="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-4 py-3 text-sm focus:border-primary dark:focus:border-neutral-500 focus:ring-0 outline-none transition-all" placeholder="Full Name" type="text"/>
+</div>
+<div class="md:col-span-2">
+<label class="block text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-1">Card Number</label>
+<input class="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-4 py-3 text-sm focus:border-primary dark:focus:border-neutral-500 focus:ring-0 outline-none transition-all" placeholder="0000 0000 0000 0000" type="text"/>
+</div>
+<div>
+<label class="block text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-1">Expiry Date</label>
+<input class="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-4 py-3 text-sm focus:border-primary dark:focus:border-neutral-500 focus:ring-0 outline-none transition-all" placeholder="MM / YY" type="text"/>
+</div>
+<div>
+<label class="block text-[10px] font-bold uppercase tracking-widest text-neutral-500 mb-1">CVC / CVV</label>
+<input class="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 px-4 py-3 text-sm focus:border-primary dark:focus:border-neutral-500 focus:ring-0 outline-none transition-all" placeholder="123" type="text"/>
+</div>
+</div>
+</section>
+<section class="mb-10">
+<h3 class="text-sm font-bold uppercase tracking-widest mb-4">Billing Address</h3>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="h-4 w-4 border-2 border-neutral-300 dark:border-neutral-700 rounded-sm text-primary focus:ring-0 focus:ring-offset-0 bg-transparent" type="checkbox"/>
+<span class="text-sm font-medium text-neutral-700 dark:text-neutral-300 group-hover:text-primary dark:group-hover:text-white transition-colors">Billing address same as shipping</span>
+</label>
+</section>
+<div class="flex flex-col md:flex-row gap-4 items-center pt-6 border-t border-neutral-200 dark:border-neutral-800">
+<button class="w-full md:w-auto bg-primary dark:bg-white dark:text-primary text-white px-10 py-4 text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
+                        Continue to Review
+                    </button>
+<a class="text-xs font-bold uppercase tracking-widest text-neutral-400 hover:text-primary dark:hover:text-white transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                        Return to Shipping
+                    </a>
+</div>
+</div>
+<!-- Right Side: Order Summary (Sticky) -->
+<aside class="w-full lg:w-[400px]">
+<div class="sticky top-10 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-8">
+<h3 class="text-sm font-bold uppercase tracking-widest mb-6 border-b border-neutral-100 dark:border-neutral-800 pb-4">Order Summary</h3>
+<div class="space-y-6 mb-8">
+<!-- Item 1 -->
+<div class="flex gap-4">
+<div class="h-20 w-16 bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="White tailored button-down shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSRpYB-IsoEPaw_xepbObVqjjFInxXsb9QXwvPYNQcWGcGuCilDCwqD61IT6NHpj4jDsmTds2pF-bN8Y25kBU9205k5EYfvmpdcKANkEMXky6uIp4mMVBQCXGRDOm57kE_x1gf7qRX-IyE3aKC7Msesz0ewYf7NVLDXrdpF-jKuttgelwMeWOLI9u044bhqMI9L81UgzfmMZBHwVE2aCrH-Qj2rJF-Jxiriv1AXAwIAETNKVD6UFGlbqDSFUd5AaVFClE8KxUYZxCU"/>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<p class="text-xs font-bold uppercase tracking-tight">Oxford Shirt — Slim Fit</p>
+<p class="text-[10px] text-neutral-500 font-medium uppercase mt-1">White / Size M</p>
+</div>
+<p class="text-xs font-bold">$85.00</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex gap-4">
+<div class="h-20 w-16 bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="Navy blue uniform tailored trousers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDd0VDMsFdrvnGcaxW0rn_pgS-ClFHpTUv3Mdp6m7-6GCh2iOcecB4w4hlrxbUHQjXa0Mwx3KbABwJatAbJNPDgziLTATMncYfXQAfqOt0MLlME72ag64VktbN2Hnd6Gc7JJyRultDPHAa4qFQLyf3TB7sZR_nGdF6uBkQh5Q1tqKkB9AJVnXzmnnu2iCW1cpFdrQVrkDFV6v_WjbRyy4gUrgc4tmAcvuQV0Un8xfmR6oKehA7c4_4moIGNnUmeGk7Z2eJhJQCPkDQi"/>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<p class="text-xs font-bold uppercase tracking-tight">Daily Trouser — Navy</p>
+<p class="text-[10px] text-neutral-500 font-medium uppercase mt-1">Navy / 32 Regular</p>
+</div>
+<p class="text-xs font-bold">$120.00</p>
+</div>
+</div>
+</div>
+<div class="border-t border-neutral-100 dark:border-neutral-800 pt-6 space-y-3">
+<div class="flex justify-between items-center">
+<span class="text-xs text-neutral-500 font-medium uppercase tracking-wider">Subtotal</span>
+<span class="text-xs font-bold">$205.00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-neutral-500 font-medium uppercase tracking-wider">Shipping</span>
+<span class="text-xs font-bold">Calculated in next step</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-neutral-500 font-medium uppercase tracking-wider">Estimated Tax</span>
+<span class="text-xs font-bold">$16.40</span>
+</div>
+<div class="flex justify-between items-center pt-4 border-t border-neutral-100 dark:border-neutral-800 mt-4">
+<span class="text-sm font-bold uppercase tracking-widest">Total</span>
+<span class="text-lg font-bold">$221.40</span>
+</div>
+</div>
+<div class="mt-8">
+<div class="flex gap-2">
+<input class="flex-1 bg-transparent border border-neutral-200 dark:border-neutral-800 px-4 py-2 text-xs focus:border-primary dark:focus:border-neutral-500 focus:ring-0 outline-none transition-all" placeholder="Promo Code" type="text"/>
+<button class="bg-neutral-100 dark:bg-neutral-800 px-4 py-2 text-[10px] font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors">Apply</button>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<footer class="mt-20 border-t border-neutral-200 dark:border-neutral-800 py-10 px-10">
+<div class="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="text-[10px] font-medium uppercase tracking-widest text-neutral-500">© 2024 Uniform Atelier. All Rights Reserved.</p>
+<div class="flex gap-8">
+<a class="text-[10px] font-bold uppercase tracking-widest hover:text-primary dark:hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="text-[10px] font-bold uppercase tracking-widest hover:text-primary dark:hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="text-[10px] font-bold uppercase tracking-widest hover:text-primary dark:hover:text-white transition-colors" href="#">Shipping Info</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout - Shipping Information</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#195de6",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "border-muted": "#e2e8f0",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        }
+        .form-input:focus {
+            border-color: #195de6 !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="w-full border-b border-border-muted dark:border-slate-800 bg-white dark:bg-background-dark px-6 py-4">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="text-primary">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 18.4228L42 11.475V34.3663C42 34.7796 41.7457 35.1504 41.3601 35.2992L24 42V18.4228Z" fill="currentColor" fill-rule="evenodd"></path>
+<path clip-rule="evenodd" d="M24 8.18819L33.4123 11.574L24 15.2071L14.5877 11.574L24 8.18819ZM9 15.8487L21 20.4805V37.6263L9 32.9945V15.8487ZM27 37.6263V20.4805L39 15.8487V32.9945L27 37.6263ZM25.354 2.29885C24.4788 1.98402 23.5212 1.98402 22.646 2.29885L4.98454 8.65208C3.7939 9.08038 3 10.2097 3 11.475V34.3663C3 36.0196 4.01719 37.5026 5.55962 38.098L22.9197 44.7987C23.6149 45.0671 24.3851 45.0671 25.0803 44.7987L42.4404 38.098C43.9828 37.5026 45 36.0196 45 34.3663V11.475C45 10.2097 44.2061 9.08038 43.0155 8.65208L25.354 2.29885Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<span class="text-xl font-bold tracking-tight">UNIFORM STORE</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">person</span>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow max-w-7xl mx-auto w-full flex flex-col md:flex-row gap-0">
+<!-- Left Side: Form (60%) -->
+<div class="w-full md:w-3/5 p-8 md:p-12 lg:pr-20 border-r border-border-muted dark:border-slate-800 bg-white dark:bg-background-dark">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-4 mb-12 font-serif italic text-sm text-slate-400">
+<span class="text-primary font-bold not-italic">Shipping</span>
+<span class="h-[1px] w-8 bg-slate-200"></span>
+<span>Payment</span>
+<span class="h-[1px] w-8 bg-slate-200"></span>
+<span>Review</span>
+</nav>
+<section>
+<h1 class="text-3xl font-serif mb-8 text-slate-900 dark:text-white tracking-tight">Shipping Information</h1>
+<form class="space-y-8">
+<!-- Contact Information -->
+<div class="space-y-4">
+<h2 class="text-sm font-semibold uppercase tracking-widest text-slate-500 mb-4">Contact Details</h2>
+<div class="flex flex-col gap-1">
+<label class="text-xs text-slate-500 font-medium ml-1">Email address
+<input class="form-input w-full border border-slate-200 dark:border-slate-700 bg-transparent rounded px-4 py-3 outline-none transition-all placeholder:text-slate-300" placeholder="email@example.com" type="email"/>
+</label></div>
+<div class="flex items-center gap-3 py-1">
+<label class="flex items-center gap-x-3 cursor-pointer group">
+<input class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 transition-colors">Email me with news and school uniform updates</span>
+</label>
+</div>
+</div>
+<!-- Shipping Address -->
+<div class="space-y-4 pt-4">
+<h2 class="text-sm font-semibold uppercase tracking-widest text-slate-500 mb-4">Shipping Address</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-1">
+<label class="text-xs text-slate-500 font-medium ml-1">First name
+<input class="form-input w-full border border-slate-200 dark:border-slate-700 bg-transparent rounded px-4 py-3 outline-none transition-all placeholder:text-slate-300" placeholder="John" type="text"/>
+</label></div>
+<div class="flex flex-col gap-1">
+<label class="text-xs text-slate-500 font-medium ml-1">Last name
+<input class="form-input w-full border border-slate-200 dark:border-slate-700 bg-transparent rounded px-4 py-3 outline-none transition-all placeholder:text-slate-300" placeholder="Doe" type="text"/>
+</label></div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-xs text-slate-500 font-medium ml-1">Address
+<input class="form-input w-full border border-slate-200 dark:border-slate-700 bg-transparent rounded px-4 py-3 outline-none transition-all placeholder:text-slate-300" placeholder="Street address" type="text"/>
+</label></div>
+<div class="flex flex-col gap-1">
+<label class="text-xs text-slate-500 font-medium ml-1">Apartment, suite, etc. (optional)
+<input class="form-input w-full border border-slate-200 dark:border-slate-700 bg-transparent rounded px-4 py-3 outline-none transition-all placeholder:text-slate-300" placeholder="Apt 4B" type="text"/>
+</label></div>
+<div class="grid grid-cols-3 gap-4">
+<div class="flex flex-col gap-1">
+<label class="text-xs text-slate-500 font-medium ml-1">City
+<input class="form-input w-full border border-slate-200 dark:border-slate-700 bg-transparent rounded px-4 py-3 outline-none transition-all placeholder:text-slate-300" placeholder="City" type="text"/>
+</label></div>
+<div class="flex flex-col gap-1">
+<label class="text-xs text-slate-500 font-medium ml-1">State
+<select class="form-input w-full border border-slate-200 dark:border-slate-700 bg-transparent rounded px-4 py-3 outline-none transition-all">
+<option>NY</option>
+<option>CA</option>
+<option>TX</option>
+</select>
+</label></div>
+<div class="flex flex-col gap-1">
+<label class="text-xs text-slate-500 font-medium ml-1">ZIP code
+<input class="form-input w-full border border-slate-200 dark:border-slate-700 bg-transparent rounded px-4 py-3 outline-none transition-all placeholder:text-slate-300" placeholder="10001" type="text"/>
+</label></div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-xs text-slate-500 font-medium ml-1">Phone
+<input class="form-input w-full border border-slate-200 dark:border-slate-700 bg-transparent rounded px-4 py-3 outline-none transition-all placeholder:text-slate-300" placeholder="(555) 000-0000" type="tel"/>
+</label></div>
+</div>
+<!-- CTA -->
+<div class="pt-8 flex items-center justify-between">
+<a class="text-sm font-medium text-slate-400 hover:text-slate-600 flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-base">arrow_back</span>
+                                Return to cart
+                            </a>
+<button class="bg-primary hover:bg-primary/90 text-white font-bold py-4 px-8 rounded-lg shadow-lg shadow-primary/20 transition-all flex items-center gap-3" type="submit">
+                                Continue to Payment
+                                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</form>
+</section>
+<!-- Footer Links -->
+<footer class="mt-20 pt-8 border-t border-slate-100 dark:border-slate-800 flex gap-6 text-[11px] uppercase tracking-widest text-slate-400">
+<a class="hover:underline" href="#">Refund Policy</a>
+<a class="hover:underline" href="#">Shipping Policy</a>
+<a class="hover:underline" href="#">Privacy Policy</a>
+<a class="hover:underline" href="#">Terms of Service</a>
+</footer>
+</div>
+<!-- Right Side: Order Summary (40%) -->
+<aside class="w-full md:w-2/5 p-8 md:p-12 bg-slate-50 dark:bg-slate-900/50">
+<div class="sticky top-8">
+<h2 class="text-sm font-semibold uppercase tracking-widest text-slate-500 mb-8">Order Summary</h2>
+<!-- Item List -->
+<div class="space-y-6 mb-8">
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-16 h-20 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden">
+<img class="object-cover w-full h-full" data-alt="White tailored school oxford shirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxbTQbqf8qYQRIlN8_fNpdza1Bg1a1mK3ui7KfDLfHdqaf8Ac4HeomNASOrBgdqCrr6TVGG8oCDjyprM3c545qZLraqgJLylMr6V1D_fG-V1d4-k7X57FAzpFaHwNsIGUuBBFBujCeA-v7YW_Pdaug559xkADsDtwN9_6GZo84tGdipGtj0Rg1lJELJyguZfHZwDERCLmHN9lhvikzsEYpl_WGH0K4uxUIIadyfqL-jOnii89xxVwmuB3A4QLn_X5RSHe8e2C4XfRW"/>
+</div>
+<span class="absolute -top-2 -right-2 bg-slate-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">1</span>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Tailored Oxford Shirt</p>
+<p class="text-xs text-slate-500">Men's / Small / White</p>
+</div>
+<span class="text-sm font-medium">$48.00</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<div class="w-16 h-20 bg-white dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden">
+<img class="object-cover w-full h-full" data-alt="Navy blue pleated school uniform skirt" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwCxM9yNQboVshkGcgBNFMOmACSDP7xdqg7xCMzdR5JKfhCQpFQzzyQg1q18bp9V8_PQCDaw-Hw_CTbb7zSI9ybKP25jxFCRDq2IDCnP0Rm_-bEdck60UkCrQhdEQl6eAeUFdBJEiVWzTCZrX-XkiPGtLfAAMrBj8jPG0HKP0hPFjlySlUixkFEYwT3D9NDvTp5yMc2w_b4DnKn4l-dRj2fOYecKkw4M-DCbUSUQ8_vQ6yUmmnH9YQr0MH4XB3G-om0ojgSV3GwMAs"/>
+</div>
+<span class="absolute -top-2 -right-2 bg-slate-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">2</span>
+</div>
+<div class="flex-grow">
+<p class="text-sm font-semibold text-slate-800 dark:text-slate-200">Pleated Tartan Skirt</p>
+<p class="text-xs text-slate-500">Youth / Medium / Navy</p>
+</div>
+<span class="text-sm font-medium">$110.00</span>
+</div>
+</div>
+<!-- Promo Code -->
+<div class="flex gap-2 mb-8">
+<input class="form-input flex-grow border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 rounded px-4 py-3 outline-none text-sm" placeholder="Gift card or discount code" type="text"/>
+<button class="px-6 py-2 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-sm font-bold rounded hover:bg-slate-300 transition-colors">Apply</button>
+</div>
+<!-- Financials -->
+<div class="space-y-3 py-6 border-t border-slate-200 dark:border-slate-800">
+<div class="flex justify-between text-sm text-slate-600 dark:text-slate-400">
+<span>Subtotal</span>
+<span class="font-medium">$158.00</span>
+</div>
+<div class="flex justify-between text-sm text-slate-600 dark:text-slate-400">
+<span>Shipping</span>
+<span class="italic">Calculated at next step</span>
+</div>
+<div class="flex justify-between text-sm text-slate-600 dark:text-slate-400">
+<span>Estimated Taxes</span>
+<span class="font-medium">$12.64</span>
+</div>
+</div>
+<!-- Total -->
+<div class="flex justify-between items-center pt-6 border-t border-slate-200 dark:border-slate-800">
+<span class="text-lg font-bold">Total</span>
+<div class="flex items-baseline gap-2">
+<span class="text-xs text-slate-400 font-medium">USD</span>
+<span class="text-2xl font-bold">$170.64</span>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</body></html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Recurrente.js</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        #recurrente-card-form {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .message {
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba de Recurrente.js</h1>
+    
+    <form id="paymentForm">
+        <div class="form-group">
+            <label for="cardName">Nombre en la Tarjeta:</label>
+            <input type="text" id="cardName" placeholder="JUAN PEREZ" required>
+        </div>
+
+        <div class="form-group">
+            <label for="recurrente-card-form">Información de Tarjeta:</label>
+            <div id="recurrente-card-form" style="border: 1px solid #ccc; padding: 10px; border-radius: 4px; min-height: 60px;"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email (opcional):</label>
+            <input type="email" id="email" placeholder="usuario@ejemplo.com">
+        </div>
+
+        <button type="button" id="submitBtn">Crear Token</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        const resultDiv = document.getElementById('result');
+        const submitBtn = document.getElementById('submitBtn');
+        let recurrenteInstance = null;
+
+        // URLs alternativas para cargar Recurrente
+        const scriptUrls = [
+            'https://cdn.recurrente.com/recurrente.js',
+            'https://js.recurrente.com/recurrente.js',
+            'https://api.recurrente.com/recurrente.js'
+        ];
+
+        // Función para cargar script
+        function loadRecurrenteScript(urlIndex = 0) {
+            if (urlIndex >= scriptUrls.length) {
+                showError('No se pudo cargar Recurrente desde ningún CDN');
+                return;
+            }
+
+            const url = scriptUrls[urlIndex];
+            console.log(`Intentando cargar desde: ${url}`);
+
+            const script = document.createElement('script');
+            script.src = url;
+            script.async = true;
+
+            script.onload = () => {
+                console.log(`✅ Script cargado desde: ${url}`);
+                initializeRecurrente();
+            };
+
+            script.onerror = () => {
+                console.warn(`⚠️ Error cargando desde ${url}`);
+                loadRecurrenteScript(urlIndex + 1);
+            };
+
+            document.head.appendChild(script);
+        }
+
+        // Función para inicializar Recurrente
+        function initializeRecurrente() {
+            setTimeout(() => {
+                try {
+                    console.log('Inicializando Recurrente...');
+                    console.log('window.Recurrente disponible:', !!window.Recurrente);
+                    
+                    if (!window.Recurrente) {
+                        showError('Recurrente.js no se cargó correctamente');
+                        return;
+                    }
+
+                    // Inicializar con PUBLIC KEY
+                    const publicKey = 'pk_test_WstctrC7ydDbKSmUt3j6eyPuw6NsRnZN4UX6moH9OrMvlbJwR2MD7m5qD';
+                    recurrenteInstance = window.Recurrente({
+                        publicKey: publicKey,
+                        environment: 'test'
+                    });
+
+                    console.log('✅ Recurrente inicializado:', recurrenteInstance);
+                    console.log('Métodos disponibles:', Object.keys(recurrenteInstance));
+                    
+                    // Montar el formulario de tarjeta
+                    if (recurrenteInstance && typeof recurrenteInstance.mount === 'function') {
+                        console.log('Montando formulario de tarjeta...');
+                        recurrenteInstance.mount('recurrente-card-form', 'card');
+                        showSuccess('Formulario de Recurrente cargado correctamente');
+                    } else if (typeof recurrenteInstance.createCardElement === 'function') {
+                        console.log('Usando createCardElement...');
+                        const cardElement = recurrenteInstance.createCardElement();
+                        document.getElementById('recurrente-card-form').appendChild(cardElement);
+                        showSuccess('Formulario de Recurrente cargado (método createCardElement)');
+                    } else {
+                        console.error('Métodos de Recurrente:', Object.keys(recurrenteInstance || {}));
+                        showError('No se pudo montar el formulario. Métodos: ' + Object.keys(recurrenteInstance || {}).join(', '));
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError('Error inicializando Recurrente: ' + error.message);
+                }
+            }, 500);
+        }
+
+        // Cargar script
+        loadRecurrenteScript();
+
+        // Submit button
+        submitBtn.addEventListener('click', async () => {
+            try {
+                if (!recurrenteInstance) {
+                    showError('Recurrente no está disponible');
+                    return;
+                }
+
+                const cardName = document.getElementById('cardName').value;
+                if (!cardName) {
+                    showError('Por favor ingresa el nombre en la tarjeta');
+                    return;
+                }
+
+                console.log('Creando token...');
+                console.log('Métodos disponibles en recurrenteInstance:', Object.keys(recurrenteInstance));
+
+                // Intentar crear token
+                let tokenResponse;
+                if (typeof recurrenteInstance.createToken === 'function') {
+                    console.log('Usando createToken()');
+                    tokenResponse = await recurrenteInstance.createToken({
+                        cardName: cardName
+                    });
+                } else if (typeof recurrenteInstance.getToken === 'function') {
+                    console.log('Usando getToken()');
+                    tokenResponse = await recurrenteInstance.getToken();
+                } else if (typeof recurrenteInstance.tokenize === 'function') {
+                    console.log('Usando tokenize()');
+                    tokenResponse = await recurrenteInstance.tokenize();
+                } else {
+                    showError('No hay método para crear token. Métodos disponibles: ' + Object.keys(recurrenteInstance).join(', '));
+                    return;
+                }
+
+                console.log('Respuesta del token:', tokenResponse);
+                if (tokenResponse && tokenResponse.token) {
+                    showSuccess('✅ Token creado: ' + tokenResponse.token.substring(0, 30) + '...');
+                } else {
+                    showError('Respuesta inesperada: ' + JSON.stringify(tokenResponse));
+                }
+            } catch (error) {
+                console.error('Error creando token:', error);
+                showError('Error: ' + error.message);
+            }
+        });
+
+        function showError(message) {
+            resultDiv.innerHTML = `<div class="message error">${message}</div>`;
+            console.error(message);
+        }
+
+        function showSuccess(message) {
+            resultDiv.innerHTML = `<div class="message success">${message}</div>`;
+            console.log(message);
+        }
+    </script>
+</body>
+</html>

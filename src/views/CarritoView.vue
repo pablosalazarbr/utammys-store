@@ -1,19 +1,41 @@
 <script setup>
 import { useCartStore } from '@/stores/cart'
-import { RouterLink } from 'vue-router'
+import { useRouter, RouterLink } from 'vue-router'
 import { ref } from 'vue'
 
+const router = useRouter()
 const cartStore = useCartStore()
 const checkoutSuccess = ref(false)
+const showClearCartModal = ref(false)
 
 function formatPrice(price) {
-  return new Intl.NumberFormat('es-CO', {
+  return new Intl.NumberFormat('es-GT', {
     style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0,
+    currency: 'GTQ',
+    minimumFractionDigits: 2,
   }).format(price)
 }
 
+function openClearCartModal() {
+  showClearCartModal.value = true
+}
+
+function closeClearCartModal() {
+  showClearCartModal.value = false
+}
+
+function confirmClearCart() {
+  cartStore.clearCart()
+  closeClearCartModal()
+}
+
+function goToCheckout() {
+  if (cartStore.items.length === 0) {
+    alert('Tu carrito está vacío')
+    return
+  }
+  router.push('/checkout')
+}
 async function handleCheckout() {
   if (cartStore.items.length === 0) {
     alert('Tu carrito está vacío')
@@ -182,14 +204,13 @@ async function handleCheckout() {
             <!-- CTA Buttons -->
             <div class="space-y-4">
               <button 
-                @click="handleCheckout"
-                :disabled="cartStore.loading"
-                class="w-full bg-primary text-white py-4 text-xs font-bold uppercase tracking-[0.3em] hover:bg-black/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                @click="goToCheckout"
+                class="w-full bg-primary text-white py-4 text-xs font-bold uppercase tracking-[0.3em] hover:bg-black/90 transition-all"
               >
-                {{ cartStore.loading ? 'Procesando...' : 'Proceder al Pago' }}
+                Proceder al Pago
               </button>
               <button 
-                @click="cartStore.clearCart"
+                @click="openClearCartModal"
                 class="w-full border border-primary text-primary py-4 text-xs font-bold uppercase tracking-[0.3em] hover:bg-primary hover:text-white transition-all"
               >
                 Vaciar Carrito
@@ -205,6 +226,38 @@ async function handleCheckout() {
         </aside>
       </div>
     </div>
+
+    <!-- Clear Cart Confirmation Modal -->
+    <transition name="modal-fade">
+      <div v-if="showClearCartModal" class="fixed inset-0 bg-black/30 z-50 flex items-center justify-center p-4" @click="closeClearCartModal">
+        <div 
+          class="bg-white rounded-sm max-w-md w-full p-8 space-y-6"
+          @click.stop
+        >
+          <!-- Header -->
+          <div class="text-center">
+            <h2 class="text-2xl font-serif mb-2">Vaciar Carrito</h2>
+            <p class="text-neutral-500 text-sm">¿Estás seguro que deseas vaciar tu carrito? Esta acción no se puede deshacer.</p>
+          </div>
+
+          <!-- Buttons -->
+          <div class="flex gap-4 pt-4">
+            <button 
+              @click="closeClearCartModal"
+              class="flex-1 border border-primary text-primary py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-primary hover:text-white transition-all"
+            >
+              Cancelar
+            </button>
+            <button 
+              @click="confirmClearCart"
+              class="flex-1 bg-red-600 text-white py-3 text-xs font-bold uppercase tracking-[0.2em] hover:bg-red-700 transition-all"
+            >
+              Vaciar
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </main>
 </template>
 
@@ -216,6 +269,16 @@ async function handleCheckout() {
 
 .fade-enter-from,
 .fade-leave-to {
+  opacity: 0;
+}
+
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
   opacity: 0;
 }
 </style>
