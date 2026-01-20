@@ -50,7 +50,7 @@ onMounted(async () => {
         quantity: item.quantity,
         customization_text: item.customizationText || null
       }))
-    }))
+    })
 
     if (orderResponse.data.success) {
       console.log('✅ Orden creada exitosamente:', orderResponse.data.data.order_id)
