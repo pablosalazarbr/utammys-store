@@ -36,7 +36,7 @@ onMounted(async () => {
     console.log('📦 Creando orden con items:', cartItems)
 
     // Crear la orden AHORA (antes de que llegue el webhook)
-    const orderResponse = await axios.post(`${API_URL}/orders/create-from-checkout`, {
+    const orderResponse = await axios.post(`${API_URL}/shop/orders/create-from-checkout`, {
       checkout_id: checkoutId,
       buyer_name: localStorage.getItem('checkout_buyer_name') || 'Customer',
       buyer_email: email,
@@ -50,7 +50,7 @@ onMounted(async () => {
         quantity: item.quantity,
         customization_text: item.customizationText || null
       }))
-    })
+    }))
 
     if (orderResponse.data.success) {
       console.log('✅ Orden creada exitosamente:', orderResponse.data.data.order_id)
