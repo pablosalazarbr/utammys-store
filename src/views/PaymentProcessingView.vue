@@ -26,8 +26,9 @@ onMounted(async () => {
       throw new Error('Missing checkout_id or email')
     }
     
-    // Obtener items del carrito (localStorage o del carrito)
-    const cartItems = cartStore.items
+    // Obtener items del localStorage (guardados en CheckoutView)
+    const savedItems = localStorage.getItem('checkout_items')
+    const cartItems = savedItems ? JSON.parse(savedItems) : cartStore.items
     
     if (!cartItems || cartItems.length === 0) {
       throw new Error('No items in cart')
@@ -48,7 +49,7 @@ onMounted(async () => {
         product_id: item.product_id || item.id,
         product_size_id: item.product_size_id,
         quantity: item.quantity,
-        customization_text: item.customizationText || null
+        customization_text: item.customization_text || null
       }))
     })
 
@@ -66,6 +67,7 @@ onMounted(async () => {
       localStorage.removeItem('checkout_shipping_method')
       localStorage.removeItem('checkout_shipping_address')
       localStorage.removeItem('checkout_shipping_city')
+      localStorage.removeItem('checkout_items')
       
       // Limpiar carrito
       cartStore.clearCart()

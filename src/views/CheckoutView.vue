@@ -154,6 +154,7 @@ async function initializeCheckoutSession() {
       // Guardar en localStorage para recuperación
       localStorage.setItem('checkout_session_id', sessionData.session_id)
       localStorage.setItem('checkout_url', sessionData.checkout_url)
+      localStorage.setItem('checkout_items', JSON.stringify(processedItems))
       
       console.log('✅ Sesión de checkout creada:', sessionData.session_id)
       console.log('🔗 Checkout URL:', sessionData.checkout_url)

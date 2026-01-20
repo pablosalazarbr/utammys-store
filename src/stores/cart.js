@@ -44,8 +44,13 @@ export const useCartStore = defineStore('cart', () => {
     if (existingItem) {
       existingItem.quantity += quantity
     } else {
+      // Asegurar que siempre tengamos product_size_id (usar el ID o índice como fallback)
+      const productSizeId = sizeObj?.id || `${product.id}-${size}`
+      
       items.value.push({
         id: product.id,
+        product_id: product.id,
+        product_size_id: productSizeId,
         name: product.name,
         description: product.description,
         price: price,
