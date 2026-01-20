@@ -400,8 +400,13 @@ async function submitOrder() {
     console.log('📋 Iniciando proceso de checkout...')
     console.log('🔄 Limpiando sesión anterior si existe')
     
-    // Guardar email en localStorage para que PaymentProcessingView pueda recuperarlo
+    // Guardar datos para que PaymentProcessingView pueda crear la orden
     localStorage.setItem('checkout_email', email.value)
+    localStorage.setItem('checkout_buyer_name', fullName.value)
+    localStorage.setItem('checkout_buyer_phone', phone.value)
+    localStorage.setItem('checkout_shipping_method', shippingMethod.value)
+    localStorage.setItem('checkout_shipping_address', address.value || 'N/A')
+    localStorage.setItem('checkout_shipping_city', city.value || 'N/A')
     
     // Limpiar sesión anterior
     checkoutSessionId.value = null
@@ -412,6 +417,8 @@ async function submitOrder() {
     
     if (result.success && result.sessionData) {
       console.log('✅ Sesión creada exitosamente, moviendo a Step 2')
+      // Guardar checkout_id para PaymentProcessingView
+      localStorage.setItem('checkout_session_id', result.sessionData.session_id)
       
       // Cambiar a Step 2 PRIMERO para que se renderice el contenedor
       currentStep.value = 2

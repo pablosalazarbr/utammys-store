@@ -1,100 +1,90 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCartStore } from '@/stores/cart'
 import axios from 'axios'
 
 const router = useRouter()
+const cartStore = useCartStore()
 const status = ref('processing')
-const message = ref('Verificando tu pago...')
+const message = ref('Procesando tu pago...')
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 
 onMounted(async () => {
   try {
-    // Obtener parámetros de la URL
+    // Obtener el checkout_id de la URL o localStorage
     const params = new URLSearchParams(window.location.search)
-    const queryStatus = params.get('status')
-    
-    console.log('📊 Payment processing page - status:', queryStatus)
-    
-    // Recuperar email y checkout_id del checkout anterior
+    const checkoutId = params.get('checkout_id') || localStorage.getItem('checkout_session_id')
     const email = localStorage.getItem('checkout_email')
-    const checkoutId = localStorage.getItem('checkout_session_id')
     
-    if (!email) {
-      throw new Error('No email found')
+    console.log('📊 Payment processing page')
+    console.log('   checkout_id:', checkoutId)
+    console.log('   email:', email)
+    
+    if (!checkoutId || !email) {
+      throw new Error('Missing checkout_id or email')
     }
     
-    // Esperar un poco para que el webhook procese
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    // Obtener items del carrito (localStorage o del carrito)
+    const cartItems = cartStore.items
     
-    // Intentar obtener la orden (máximo 15 intentos)
-    let response = null
-    let orderFound = false
-    
-    for (let attempt = 0; attempt < 15; attempt++) {
-      try {
-        response = await axios.get(`${API_URL}/shop/orders/latest`, {
-          params: { email }
-        })
-        
-        if (response.data.success) {
-          orderFound = true
-          console.log('✅ Orden encontrada en intento:', attempt + 1)
-          break
-        }
-      } catch (err) {
-        console.log(`Intento ${attempt + 1}/15: Orden no encontrada aún`)
-        if (attempt < 14) {
-          await new Promise(resolve => setTimeout(resolve, 1000))
-        }
-      }
+    if (!cartItems || cartItems.length === 0) {
+      throw new Error('No items in cart')
     }
-    
-    // Si no se encontró la orden por polling, intentar verificar directamente con Recurrente
-    if (!orderFound && checkoutId) {
-      console.log('⚠️ Orden no encontrada por polling, verificando con Recurrente...')
-      
-      try {
-        response = await axios.post(`${API_URL}/orders/verify-and-create-from-checkout`, {
-          checkout_id: checkoutId,
-          email: email
-        })
-        
-        if (response.data.success) {
-          orderFound = true
-          console.log('✅ Orden creada desde verificación de Recurrente')
-        }
-      } catch (err) {
-        console.error('❌ Error verificando con Recurrente:', err.message)
-      }
-    }
-    
-    if (orderFound && response?.data?.success) {
-      console.log('✅ Orden encontrada:', response.data.data.order_id)
+
+    console.log('📦 Creando orden con items:', cartItems)
+
+    // Crear la orden AHORA (antes de que llegue el webhook)
+    const orderResponse = await axios.post(`${API_URL}/orders/create-from-checkout`, {
+      checkout_id: checkoutId,
+      buyer_name: localStorage.getItem('checkout_buyer_name') || 'Customer',
+      buyer_email: email,
+      buyer_phone: localStorage.getItem('checkout_buyer_phone') || '',
+      shipping_method: localStorage.getItem('checkout_shipping_method') || 'pickup',
+      shipping_address: localStorage.getItem('checkout_shipping_address') || 'N/A',
+      shipping_city: localStorage.getItem('checkout_shipping_city') || 'N/A',
+      items: cartItems.map(item => ({
+        product_id: item.product_id || item.id,
+        product_size_id: item.product_size_id,
+        quantity: item.quantity,
+        customization_text: item.customizationText || null
+      }))
+    })
+
+    if (orderResponse.data.success) {
+      console.log('✅ Orden creada exitosamente:', orderResponse.data.data.order_id)
       status.value = 'success'
-      message.value = 'Pago completado exitosamente'
+      message.value = 'Pago procesado, orden creada'
       
       // Limpiar localStorage
       localStorage.removeItem('checkout_session_id')
       localStorage.removeItem('checkout_url')
       localStorage.removeItem('checkout_email')
+      localStorage.removeItem('checkout_buyer_name')
+      localStorage.removeItem('checkout_buyer_phone')
+      localStorage.removeItem('checkout_shipping_method')
+      localStorage.removeItem('checkout_shipping_address')
+      localStorage.removeItem('checkout_shipping_city')
+      
+      // Limpiar carrito
+      cartStore.clearCart()
       
       // Redirigir a checkout success en 2 segundos
       setTimeout(() => {
         router.push({ 
           path: '/checkout/success', 
-          query: { order_id: response.data.data.order_id }
+          query: { order_id: orderResponse.data.data.order_id }
         })
       }, 2000)
     } else {
-      throw new Error('Order not found after verification')
+      throw new Error(orderResponse.data.message || 'Failed to create order')
     }
     
   } catch (error) {
     console.error('❌ Error:', error)
     status.value = 'error'
-    message.value = 'Error verificando tu pago. Intenta nuevamente.'
+    message.value = 'Error procesando tu pago. Intenta nuevamente.'
     
     setTimeout(() => {
       router.push('/checkout')
